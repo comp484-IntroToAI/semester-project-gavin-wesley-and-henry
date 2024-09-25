@@ -10,3 +10,9 @@
 
 
 ## Example (very complicated & library-dependent) tree farm [Here](https://github.com/Lupus590-CC/CC-TreeFarm/tree/master)
+
+
+## [Merlib](https://github.com/merlinlikethewizard/Shacktuator/tree/main/merlib) - our library we'll probably use
+
+
+## Video to make you feel better about not doing deep learning [Here](https://www.youtube.com/watch?v=DJtK0bmSMGs&)
