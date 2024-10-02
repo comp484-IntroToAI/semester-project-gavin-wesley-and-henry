@@ -7,6 +7,8 @@
 ## LAMA? Location-Aware Movement [Here](https://github.com/dirthsj/LAMA/wiki)
     - turtles get fucked if world closes while they're mid operation - can forget where they are and what direction they're facing
     - looks like LAMA solves that
+    - this is definitely deprecated - ignore this!
+        - we'll just maintain persistence ourselves with our own smart libraries
 
 
 ## Example (very complicated & library-dependent) tree farm [Here](https://github.com/Lupus590-CC/CC-TreeFarm/tree/master)
