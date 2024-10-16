@@ -5,14 +5,10 @@
     reupload the installer file too.
 ]]
 function install()
+    shell.run("wget", "https://raw.githubusercontent.com/comp484-IntroToAI/semester-project-gavin-wesley-and-henry/refs/heads/main/testTurtleScripts/startup.lua?token=GHSAT0AAAAAACW7P2EVGIADHP3H6VSG6N4QZYPDSTQ", "startup")
+    shell.run("wget", "https://raw.githubusercontent.com/comp484-IntroToAI/semester-project-gavin-wesley-and-henry/refs/heads/main/testTurtleScripts/smartActions.lua?token=GHSAT0AAAAAACW7P2EVNJZA4THV3UESYGPWZYPDSMA", "smartActions")
     shell.run("wget","https://raw.githubusercontent.com/comp484-IntroToAI/semester-project-gavin-wesley-and-henry/refs/heads/main/testTurtleScripts/findBedrock.lua?token=GHSAT0AAAAAACW7P2EVJA32BJCTQG2FYYMCZYPDO7A", "findBedrock")
-
-    -- shell.run("pastebin","get", "6HmrGBe8", "startup")
-    -- shell.run("pastebin", "get", "XzAPXqsM", "smartActions")
-    -- shell.run("pastebin", "get", "0j5Mjyuj", "findBedrock")
 end
-
-
 
 install()
 
