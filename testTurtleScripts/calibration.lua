@@ -1,7 +1,9 @@
 local calibration = {}
 
-local smac = require "smartActions"
+-- if calibration requires smac, and smac requires calibration, everything breaks
+-- which means we can't use samc helper functions here
 
+-- meaning smac probably ends up being a "higher-level" helper library
 
 local function goToBedrock() 
     local foundBedrock = false
@@ -14,8 +16,12 @@ local function goToBedrock()
                 foundBedrock = true
                 return true
             end
+
             -- if the block isn't bedrock, mine it to clear our path
-            smac.digDown()
+            turtle.digDown()
+            -- this used to be smac. think if we need more edge-case handling that smac provides
+            -- if we do, we'll need to change it up a bit
+
         end
         
         -- move down one block
@@ -61,7 +67,9 @@ local function checkStillInBedrock()
         turtle.turnLeft()
 
         -- try to dig forward one block, if we succeed, go forward and check for bedrock and then repeat
-        local success, reason = smac.dig()
+        local success, reason = turtle.dig()
+        -- TODO - this dig used to be smac. think if there's ever a world where we need
+        -- edge case handling here. we're in bedrock, so probs not, but worth checking
 
         -- if we successfully dig, or there's nothing there, then move and check
         if success or reason == "Nothing to dig here" then
@@ -136,7 +144,14 @@ end
 function calibration.resetY()
     goToBedrock()
     goToTopOfBedrock()
-    smac.setY(-59)
+
+    -- this used to be smac.setY, but that breaks, so doing it ourselves
+    -- need to think about whether settings is already loaded, etc.
+
+    settings.load()
+    settings.set("yLevel", -59)
+    settings.save()
+
     return true
 end
 
