@@ -93,6 +93,7 @@ local function calibrateY()
     local calibrated = false
     local yIncrease = 0
 
+    -- while we're still in the middle bedrock layers, check again and move up
     while not calibrated do
         -- if we've already moved up 4 layers, our only possibility is to be over bedrock
         if yIncrease == 4 then
@@ -100,20 +101,23 @@ local function calibrateY()
         end
 
         -- check if there's any bedrock on our y-level right next to us, if there is we must not be on the right level
+        -- so we just move up and note our y-level increasing
         if checkBlock("minecraft:bedrock") then
             turtle.up()
             yIncrease = yIncrease + 1
         else 
+            -- if there's not, then we're probably calibrated!
+            -- this breaks us out of our calibration loop
             calibrated = true
         end
     end
 
     -- now we do a reality check. we don't need to if our yIncrease is 4, because we'd know we're right above the top layer of bedrock
-    -- if we're not in reality, we just recalibrate one block higher than we're in
-
     if yIncrease ~= 4 then
         print("running reality check")
+
         if not realityCheck() then
+            -- if our realityCheck failed, we were in a weird edge case. just move up one and recalibrate
             print("reality failed, so moving up and recalibrating")
             turtle.up()
             calibrateY()
