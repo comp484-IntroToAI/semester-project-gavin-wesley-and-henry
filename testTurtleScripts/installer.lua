@@ -1,6 +1,6 @@
 
 --[[
-    Our installer module! Just run 'wget "https://raw.githubusercontent.com/comp484-IntroToAI/semester-project-gavin-wesley-and-henry/refs/heads/main/testTurtleScripts/installer.lua'
+    Our installer module! Just run 'wget "https://raw.githubusercontent.com/comp484-IntroToAI/semester-project-gavin-wesley-and-henry/refs/heads/main/testTurtleScripts/installer.lua
     to get this file
 ]]
 function install()
@@ -19,7 +19,7 @@ function install()
     -- Test stuff:
 
     -- Smart mine
-    shell.run("wget","https://raw.githubusercontent.com/comp484-IntroToAI/semester-project-gavin-wesley-and-henry/refs/heads/main/testTurtleScripts/smartMine.lua", "calibration")
+    shell.run("wget","https://raw.githubusercontent.com/comp484-IntroToAI/semester-project-gavin-wesley-and-henry/refs/heads/main/testTurtleScripts/smartMine.lua", "smartmine")
 end
 
 install()
