@@ -50,9 +50,15 @@ function smartActions.smartDig()
     return dug, reason
 end
 
--- these are still proof-of-concepts. Basically settings is our persistent storage, and we can maybe
--- just store our state in there. Need to look into how slow settings.save is and whether the state
--- can be fucked by leaving at an inopportune time
+-- 
+
+--[[
+    Functions to interact with our internal y-level representation
+
+    these are still proof-of-concepts. Basically settings is our persistent storage, and we can maybe
+    just store our state in there. Need to look into how slow settings.save is and whether the state
+    can be fucked by leaving at an inopportune time
+    ]]
 function smartActions.setY(yValue)
     settings.set("yLevel", yValue)
     settings.save()
@@ -62,6 +68,24 @@ function smartActions.getY()
     return settings.get("yLevel")
 end
 
+
+function smartActions.checkInventoryForItem(itemName)
+    local success = false
+    local foundSlot = nil
+    for i=1,16 do
+        print(i)
+        local itemDetails = turtle.getItemDetail(i)
+        if itemDetails ~= nil then
+            if itemDetails["name"] == itemName then
+                success = true
+                foundSlot = i
+            end
+        end
+    end
+
+    if not success then return success
+    else return {success, foundSlot} end
+end
 
 
 -- Return the module! --+

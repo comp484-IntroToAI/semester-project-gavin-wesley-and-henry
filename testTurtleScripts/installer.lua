@@ -1,13 +1,14 @@
 
 --[[
-    Our installer module! When we make changes to any of these files, 
-    we'll need to reupload to pastebin and replace the code, and then
-    reupload the installer file too.
+    Our installer module! Just run 'wget "https://raw.githubusercontent.com/comp484-IntroToAI/semester-project-gavin-wesley-and-henry/refs/heads/main/testTurtleScripts/installer.lua'
+    to get this file
 ]]
 function install()
-    shell.run("wget", "https://raw.githubusercontent.com/comp484-IntroToAI/semester-project-gavin-wesley-and-henry/refs/heads/main/testTurtleScripts/startup.lua?token=GHSAT0AAAAAACW7P2EVGIADHP3H6VSG6N4QZYPDSTQ", "startup")
-    shell.run("wget", "https://raw.githubusercontent.com/comp484-IntroToAI/semester-project-gavin-wesley-and-henry/refs/heads/main/testTurtleScripts/smartActions.lua?token=GHSAT0AAAAAACW7P2EVNJZA4THV3UESYGPWZYPDSMA", "smartActions")
-    shell.run("wget","https://raw.githubusercontent.com/comp484-IntroToAI/semester-project-gavin-wesley-and-henry/refs/heads/main/testTurtleScripts/findBedrock.lua?token=GHSAT0AAAAAACW7P2EVJA32BJCTQG2FYYMCZYPDO7A", "findBedrock")
+    shell.run("wget", "https://raw.githubusercontent.com/comp484-IntroToAI/semester-project-gavin-wesley-and-henry/refs/heads/main/testTurtleScripts/startup.lua", "startup")
+    
+    shell.run("wget", "https://raw.githubusercontent.com/comp484-IntroToAI/semester-project-gavin-wesley-and-henry/refs/heads/main/testTurtleScripts/smartActions.lua", "smartActions")
+    
+    shell.run("wget","https://raw.githubusercontent.com/comp484-IntroToAI/semester-project-gavin-wesley-and-henry/refs/heads/main/testTurtleScripts/findBedrock.lua", "findBedrock")
 end
 
 install()

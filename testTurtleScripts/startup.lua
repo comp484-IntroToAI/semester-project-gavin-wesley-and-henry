@@ -9,3 +9,9 @@
 -- this will be used more extensively eventually, but it's just a placeholder for now
 
 print("This computer just turned on")
+
+
+
+
+-- Add a calibrater, and run this here:
+    -- loads settings, reselects item slot, checks fuel, checks inventory
