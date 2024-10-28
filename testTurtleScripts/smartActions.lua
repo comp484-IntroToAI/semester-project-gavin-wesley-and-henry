@@ -143,6 +143,21 @@ function smartActions.moveDown()
     return success, reason
 end
 
+-- Goes forward, breaking blocks in front of it if necessary
+function smartActions.goForward()
+    local moveSuccess, moveReason = turtle.forward()
+    if moveSuccess then return true end
+    
+    local digSuccess, digReason = smartActions.dig()
+    if not digSuccess then
+        print(" SHIT IS REALLY BROKEN SHIT IS REALLY BROKEN")
+        print(digReason)
+        return false
+    end
+
+    moveSuccess, moveReason = smartActions.move()
+    return moveSuccess
+end
 
 -- Goes up, smartly breaking blocks if necessary
 function smartActions.goUp()
