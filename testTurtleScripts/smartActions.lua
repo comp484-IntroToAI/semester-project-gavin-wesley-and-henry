@@ -241,10 +241,6 @@ function smartActions.selectItem(itemName)
     return false
 end
 
-
--- TODO: function that selects a given item, similar to above
-
-
         --[[    CALIBRATION FUNCTIONS       ]]--
 
 -- sets the turtle's internal y value to a value. Expects settings to be loaded already
