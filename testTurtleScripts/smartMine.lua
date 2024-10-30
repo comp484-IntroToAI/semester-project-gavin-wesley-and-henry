@@ -21,6 +21,11 @@ end
 searchForDiamonds()
 
 
+
+function growSugarCane()
+    --TODO: make it work (Henry wants to)
+end
+
 -----
 -- TODO
 
