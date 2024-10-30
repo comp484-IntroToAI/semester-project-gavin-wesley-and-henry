@@ -156,6 +156,14 @@ function calibration.resetY()
 end
 
 
+
+-- did set y alr :)
+
+-- TODO:
+
+-- CHECK INVENTORY / UPDATE REQUIRED MATERIALS type beat
+-- CHECK FUEL / INITIAL REFUEL
+
 -- Return the module
 -------------------+
 return calibration

@@ -232,6 +232,8 @@ function smartActions.checkInventoryForItem(itemName)
     else return {success, foundSlot} end
 end
 
+-- TODO: function that selects a given item, similar to above
+
 
         --[[    CALIBRATION FUNCTIONS       ]]--
 
