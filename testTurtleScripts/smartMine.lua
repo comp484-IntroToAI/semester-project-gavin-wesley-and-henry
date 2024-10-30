@@ -19,3 +19,12 @@ local function searchForDiamonds()
 end
 
 searchForDiamonds()
+
+
+-----
+-- TODO
+
+-- FIND SAND, WOOD, AND WATER.
+-- GROW SUGARCANE
+
+------
