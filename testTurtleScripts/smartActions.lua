@@ -237,7 +237,7 @@ function smartActions.selectItem(itemName)
     if checkResult == false then
         return false
     end
-    select(checkResult[1])
+    select(checkResult[2])
     return true
 end
 
