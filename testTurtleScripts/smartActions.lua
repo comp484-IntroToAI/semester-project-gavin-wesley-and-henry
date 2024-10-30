@@ -249,13 +249,12 @@ function smartActions.setY(yValue)
 end
 
 -- returns the turtle's internal y level
--- currently, forces it to calibrate if the level isn't set yet. TODO figure out if that's the right behavior
+-- currently, returns false if it isn't set yet.
 function smartActions.getY()
     local y = settings.get("yLevel")
 
     if y == nil then 
-        calibration.resetY()
-        return -59 -- maybe could just returns settings.get again, because would have been set by calibration
+        return false
     end
 
     return y

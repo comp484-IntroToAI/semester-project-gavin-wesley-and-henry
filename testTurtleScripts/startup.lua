@@ -5,10 +5,17 @@
     the computer gets reloaded from an unloaded chunk.
 ]]
 
-
+local smartMine = require("smartMine")
+local smartCraft = require("smartCraft")
+local calibration = require("calibration")
 -- this will be used more extensively eventually, but it's just a placeholder for now
 
-print("This computer just turned on")
+
+-- ALL THE CALIBRATION TO START WITH
+calibration.setY()
+
+-- BELOW ARE TEST RUNS RIGHT NOW
+smartMine.searchForDiamonds()
 
 
 
