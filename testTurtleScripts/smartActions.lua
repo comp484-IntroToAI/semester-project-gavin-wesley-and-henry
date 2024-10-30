@@ -234,11 +234,11 @@ end
 
 function smartActions.selectItem(itemName)
     local checkResult = smartActions.checkInventoryForItem(itemName)
-    if checkResult[0] then
-        select(checkResult[1])
-        return true
+    if checkResult == false then
+        return false
     end
-    return false
+    select(checkResult[1])
+    return true
 end
 
         --[[    CALIBRATION FUNCTIONS       ]]--
