@@ -232,6 +232,16 @@ function smartActions.checkInventoryForItem(itemName)
     else return {success, foundSlot} end
 end
 
+function smartActions.selectItem(itemName)
+    local checkResult = smartActions.checkInventoryForItem(itemName)
+    if checkResult[0] then
+        select(checkResult[1])
+        return true
+    end
+    return false
+end
+
+
 -- TODO: function that selects a given item, similar to above
 
 
