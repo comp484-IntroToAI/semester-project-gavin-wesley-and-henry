@@ -25,11 +25,6 @@ local function stickToSurface()
     -- TODO: make a function that, when called, has the turtle go down until it is resting on a surface block (check for leaves?)
 end
 
-
-function growSugarCane()
-    --TODO: make it work (Henry wants to)
-end
-
 -----
 -- TODO
 
