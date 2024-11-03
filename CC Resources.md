@@ -18,3 +18,13 @@
 
 
 ## Video to make you feel better about not doing deep learning [Here](https://www.youtube.com/watch?v=DJtK0bmSMGs&)
+
+
+
+# How To Turn Off Fuel!
+- go to the folder for your computercraft profile. you should know this directory from the setup process
+    - click the saves folder, which contains info about particular worlds
+    - go into the world you want to turn fuel off for, then go to the serverconfig folder
+        - open the computercraft-server.toml file
+        - search for fuel
+            - there should be a line about whether turtles need fuel, change it to false

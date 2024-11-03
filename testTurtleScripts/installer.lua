@@ -7,8 +7,8 @@ function install()
 
     -- Main stuff:
 
-    -- STARTUP
-    shell.run("wget", "https://raw.githubusercontent.com/comp484-IntroToAI/semester-project-gavin-wesley-and-henry/refs/heads/main/testTurtleScripts/startup.lua", "startup")
+    -- STARTUP (we are just calling it main right now, so it doesn't automatically run)
+    shell.run("wget", "https://raw.githubusercontent.com/comp484-IntroToAI/semester-project-gavin-wesley-and-henry/refs/heads/main/testTurtleScripts/startup.lua", "main")
     
     -- SMART ACTIONS (smac)
     shell.run("wget", "https://raw.githubusercontent.com/comp484-IntroToAI/semester-project-gavin-wesley-and-henry/refs/heads/main/testTurtleScripts/smartActions.lua", "smartActions")
@@ -16,10 +16,12 @@ function install()
     -- CALIBRATION (calibration)
     shell.run("wget","https://raw.githubusercontent.com/comp484-IntroToAI/semester-project-gavin-wesley-and-henry/refs/heads/main/testTurtleScripts/calibration.lua", "calibration")
 
-    -- Test stuff:
+    -- MINING STATE FUNCTIONS (smartMine)
+    shell.run("wget","https://raw.githubusercontent.com/comp484-IntroToAI/semester-project-gavin-wesley-and-henry/refs/heads/main/testTurtleScripts/smartMine.lua", "smartMine")
 
-    -- Smart mine
-    shell.run("wget","https://raw.githubusercontent.com/comp484-IntroToAI/semester-project-gavin-wesley-and-henry/refs/heads/main/testTurtleScripts/smartMine.lua", "smartmine")
+    -- CRAFTING STATE FUNCTIONS (smartCraft)
+    shell.run("wget","https://raw.githubusercontent.com/comp484-IntroToAI/semester-project-gavin-wesley-and-henry/refs/heads/main/testTurtleScripts/smartCraft.lua", "smartCraft")
+
 end
 
 install()

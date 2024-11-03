@@ -1,11 +1,65 @@
+-- DEFINE LIBRARY----
+local smartCraft = {}
+---------------------
+
 local smac = require "smartActions"
 
+-- Function assumes we are STANDING on a piece of sand that is water-adjacent!!
+function smartCraft.growSugarCane(scToGrow)
+    -- Select the sugar cane, or return false if unsuccessful
 
-function growSugarCane()
-    --TODO: make it work (Henry wants to)
+    if smac.selectItem("minecraft:sugar_cane") == false then
+        return false
+    end
+
+    local initialSugarCaneCount = turtle.getItemCount()
+
+    local moved, r = smac.moveUp()
+    if not moved then
+        return false
+    end
+
+    local placed, re = turtle.placeDown()
+    if not placed then
+        return false
+    end
+
+    local moved2, rea = smac.moveUp()
+    if not moved then
+        return false
+    end
+
+    while (turtle.getItemCount() < ((initialSugarCaneCount-1) + scToGrow)) do
+        local block_down, details = turtle.inspectDown()
+        if block_down then
+            if details["name"] == "minecraft:sugar_cane" then
+                turtle.digDown() -- Not using SMAC here beacuse that gives us more info than we really need.
+            end
+        end
+    end
+
+    smac.moveDown()
+    smac.digDown()
+    turtle.turnLeft()
+    turtle.turnLeft()
+    turtle.turnLeft()
+    turtle.turnLeft()
+    smac.moveDown()
+    return true
 end
 
+function smartCraft.findSugarCaneLocation()
+    --TODO: create a function that either finds or creates a situation where sand is next to water
+    -- HAVE IT LEAVE THE TURTLE ON THE SAND
+end
 
 -- Tries to craft a new turtle. Returns True if Sucessful, False if otherwise. 
-function craftNewTurtle()
+function smartCraft.craftNewTurtle()
+
 end
+
+
+
+--- RETURN LIBRARY----
+return smartCraft
+----------------------

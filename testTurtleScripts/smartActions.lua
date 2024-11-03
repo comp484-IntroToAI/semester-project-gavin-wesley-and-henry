@@ -232,8 +232,14 @@ function smartActions.checkInventoryForItem(itemName)
     else return {success, foundSlot} end
 end
 
--- TODO: function that selects a given item, similar to above
-
+function smartActions.selectItem(itemName)
+    local checkResult = smartActions.checkInventoryForItem(itemName)
+    if checkResult == false then
+        return false
+    end
+    turtle.select(checkResult[2])
+    return true
+end
 
         --[[    CALIBRATION FUNCTIONS       ]]--
 
@@ -249,13 +255,12 @@ function smartActions.setY(yValue)
 end
 
 -- returns the turtle's internal y level
--- currently, forces it to calibrate if the level isn't set yet. TODO figure out if that's the right behavior
+-- currently, returns false if it isn't set yet.
 function smartActions.getY()
     local y = settings.get("yLevel")
 
     if y == nil then 
-        calibration.resetY()
-        return -59 -- maybe could just returns settings.get again, because would have been set by calibration
+        return false
     end
 
     return y
