@@ -15,28 +15,37 @@ function smartCraft.growSugarCane(scToGrow)
     local initialSugarCaneCount = turtle.getItemCount()
 
     local moved, r = smac.moveUp()
-    if ~moved then
+    if not moved then
         return false
     end
 
     local placed, re = turtle.placeDown()
-    if ~placed then
+    if not placed then
         return false
     end
 
-    local moved2, r = smac.moveUp()
-    if ~moved then
+    local moved2, rea = smac.moveUp()
+    if not moved then
         return false
     end
 
-    while (turtle.getItemCount() < (initialSugarCaneCount + )) do
+    while (turtle.getItemCount() < ((initialSugarCaneCount-1) + scToGrow)) do
         local block_down, details = turtle.inspectDown()
         if block_down then
             if details["name"] == "minecraft:sugar_cane" then
                 turtle.digDown() -- Not using SMAC here beacuse that gives us more info than we really need.
             end
+        end
     end
 
+    smac.moveDown()
+    smac.digDown()
+    turtle.turnLeft()
+    turtle.turnLeft()
+    turtle.turnLeft()
+    turtle.turnLeft()
+    smac.moveDown()
+    return true
 end
 
 function smartCraft.findSugarCaneLocation()
@@ -46,6 +55,7 @@ end
 
 -- Tries to craft a new turtle. Returns True if Sucessful, False if otherwise. 
 function smartCraft.craftNewTurtle()
+
 end
 
 
