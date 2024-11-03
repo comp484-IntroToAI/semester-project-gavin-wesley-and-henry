@@ -26,11 +26,55 @@ end
 
 
 function smartMine.mineVein()
-    -- TODO by Wesley
-    -- You are face to face with the block that you would like to mine.
-    -- Mine a 5x5 cube around it
-    -- Don't worry about inventory management, and just worry about making it work on Diamonds for now
-    -- make sure to use functions from smartActions (smac)
+    -- go to the back of the cube
+    turtle.backward()
+    -- mine a 5x5 square, then go back to the center and move forward and do it 4 more times
+    -- the turtle should end up facing forward one block ahead of the cube
+    -- the y-value shouldn't need to be updated unless it has to stop in the middle for some reason, probably fuel
+    -- I don't have time to test it right now, also idk if it needs to be changed at all based on which block it's mining
+    for i = 1, 5 do
+       smac.goUp()
+       smac.goUp()
+       turtle.turnRight()
+       smac.goForward()
+       smac.goForward()
+       smac.goDown()
+       turtle.turnLeft()
+       turtle.turnLeft()
+       smac.goForward()
+       smac.goDown()
+       turtle.turnRight()
+       turtle.turnRight()
+       smac.goForward()
+       smac.goDown()
+       smac.goDown()
+       turtle.turnLeft()
+       turtle.turnLeft()
+       smac.goForward()
+       smac.goUp()
+       smac.goForward()
+       smac.goDown()
+       smac.goForward()
+       smac.goForward()
+       smac.goUp()
+       turtle.turnRight()
+       turtle.turnRight()
+       smac.goForward()
+       smac.goUp()
+       smac.goUp()
+       smac.goUp()
+       turtle.turnLeft()
+       turtle.turnLeft()
+       smac.goForward()
+       smac.goDown()
+       smac.goDown()
+       turtle.turnRight()
+       turtle.turnRight()
+       smac.goForward()
+       smac.goForward()
+       turtle.turnLeft()
+       smac.goForward()
+    end
 end
 
 
