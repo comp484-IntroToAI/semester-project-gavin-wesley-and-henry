@@ -8,7 +8,7 @@ local smac = require "smartActions"
 function smartCraft.growSugarCane(scToGrow)
     -- Select the sugar cane, or return false if unsuccessful
 
-    if smac.selectItem("minecraft:sugar_cane") == false
+    if smac.selectItem("minecraft:sugar_cane") == false then
         return false
     end
 
