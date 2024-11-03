@@ -15,17 +15,17 @@ function smartCraft.growSugarCane(scToGrow)
     local initialSugarCaneCount = turtle.getItemCount()
 
     local moved, r = smac.moveUp()
-    if ~moved
+    if ~moved then
         return false
     end
 
     local placed, re = turtle.placeDown()
-    if ~placed
+    if ~placed then
         return false
     end
 
     local moved2, r = smac.moveUp()
-    if ~moved
+    if ~moved then
         return false
     end
 
