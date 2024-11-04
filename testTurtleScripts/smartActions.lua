@@ -155,7 +155,7 @@ function smartActions.goForward()
         return false
     end
 
-    moveSuccess, moveReason = smartActions.move()
+    moveSuccess, moveReason = turtle.forward()
     return moveSuccess
 end
 
