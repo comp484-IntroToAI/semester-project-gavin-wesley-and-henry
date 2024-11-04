@@ -51,7 +51,7 @@ function smartMine.mineForBasicOre(ore)
         digUntilFind("minecraft:deepslate_diamond_ore", "minecraft:diamond_ore")
     end
 
-    if ore == "iron" then
+    if ore == "redstone" then
         smac.goToY(-59)
         digUntilFind("minecraft:deepslate_redstone_ore", "minecraft:redstone_ore")
     end
