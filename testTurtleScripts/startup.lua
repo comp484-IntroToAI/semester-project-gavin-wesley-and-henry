@@ -15,7 +15,7 @@ local calibration = require("calibration")
 calibration.setY()
 
 -- BELOW ARE TEST RUNS RIGHT NOW
-smartMine.searchForDiamonds()
+smartMine.mineForBasicOre("diamonds")
 
 
 
