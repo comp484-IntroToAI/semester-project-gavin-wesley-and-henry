@@ -48,9 +48,30 @@ function smartCraft.growSugarCane(scToGrow)
     return true
 end
 
+-- Function that positions the turtle such that it is standing above water.
+-- Does so by wandering around at water level.
+function smartCraft.locateWater()
+    -- Go to water level:
+    smac.goToY(63)
+
+    -- Go until we find water
+    while true do
+        local has_block, details = turtle.inspectDown()
+        if has_block then
+            if details["name"] == "minecraft:water" then
+
+                break
+            end
+        end
+        smac.goForward()
+    end
+end
+
+-- Function that finds sand that is next to water.
+-- Could be adapted if we decide to find sand and place it next to water, but that seems trickier
+-- to me, because sand can fall? I dunno.
 function smartCraft.findSugarCaneLocation()
-    --TODO: create a function that either finds or creates a situation where sand is next to water
-    -- HAVE IT LEAVE THE TURTLE ON THE SAND
+    -- TODO make this!
 end
 
 -- Tries to craft a new turtle. Returns True if Sucessful, False if otherwise. 
