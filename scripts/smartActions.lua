@@ -3,12 +3,11 @@ local smartActions = {}
 -- TODO - figure out whether requires within modules breaks stuff. does it make programs that require this run it too?
 local calibration = require "calibration"
 
--- consider whether necessary. maybe to not break disk drives/stuff
-local dig_disallowed = {}
 
 
--- if i do this in the module, it does run it for the files that use it!
--- TODO move this to a calibration function/module
+
+
+-- TODO move this to startup function/module
 settings.load()
 
 --[[
@@ -232,6 +231,9 @@ function smartActions.checkInventoryForItem(itemName)
     else return {success, foundSlot} end
 end
 
+--[[
+    If an item is in the inventory, selects the last inventory slot with that item in it.
+]]
 function smartActions.selectItem(itemName)
     local checkResult = smartActions.checkInventoryForItem(itemName)
     if checkResult == false then
@@ -239,6 +241,45 @@ function smartActions.selectItem(itemName)
     end
     turtle.select(checkResult[2])
     return true
+end
+
+
+--[[
+    Drops all items that are not whitelisted items. Keeps at most one full stack/slot of whitelisted items. The list of whitelisted items
+    is defined at the top of this function.
+    
+    -- TODO: make this dump excess whitelisted
+]]
+function smartActions.dumpItems()
+    -- TODO: figure out how to handle processed versions of this. for instance if we have floppy already, we never need lapis again
+    -- TODO: add logs/planks to this system.
+    -- TODO: figure out if we include buckets here. probably, but might affect stack checking logic
+    local names = {"minecraft:diamond", "minecraft:redstone", "minecraft:raw_iron", "minecraft:lapis_lazuli", "minecraft:sugar_cane", "minecraft:cobblestone", "minecraft:sand", "minecraft:bucket","minecraft:water_bucket"}
+
+    -- we create a set version of this table because we want to be able to check whether some item is in the list
+    -- we can't just define them as keys in the initial construction because table keys can't contain colons
+    -- this is what enables the [] indexing syntax
+    local whitelisted = {}
+    for index,name in ipairs(names) do
+        whitelisted[name] = true
+    end
+    -- finished setting up whitelisted
+
+    local startSlot = turtle.getSelectedSlot()
+
+    for i=1,16 do
+        local itemDetails = turtle.getItemDetail(i)
+        -- if there's an item in the slot
+        if itemDetails ~= nil then
+            -- if the item's name is not in the list of whitelisted items (defined at top of smartActions file)
+            if whitelisted[itemDetails["name"]] == nil then  
+                turtle.select(i)
+                turtle.drop()
+            end
+        end
+    end
+
+    turtle.select(startSlot)
 end
 
         --[[    CALIBRATION FUNCTIONS       ]]--
