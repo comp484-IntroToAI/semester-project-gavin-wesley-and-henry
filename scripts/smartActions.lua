@@ -243,12 +243,13 @@ function smartActions.selectItem(itemName)
     return true
 end
 
+-- TODO make a gatherItems function that conglomerates multiple stacks
 
 --[[
     Drops all items that are not whitelisted items. Keeps at most one full stack/slot of whitelisted items. The list of whitelisted items
     is defined at the top of this function.
     
-    -- TODO: make this dump excess whitelisted
+    -- TODO: use gatherItems to make sure the first slot we see is the bigger stack, so we dump the smaller ones
 ]]
 function smartActions.dumpItems()
     -- TODO: figure out how to handle processed versions of this. for instance if we have floppy already, we never need lapis again
@@ -261,7 +262,7 @@ function smartActions.dumpItems()
     -- this is what enables the [] indexing syntax
     local whitelisted = {}
     for index,name in ipairs(names) do
-        whitelisted[name] = true
+        whitelisted[name] = false
     end
     -- finished setting up whitelisted
 
@@ -271,8 +272,17 @@ function smartActions.dumpItems()
         local itemDetails = turtle.getItemDetail(i)
         -- if there's an item in the slot
         if itemDetails ~= nil then
-            -- if the item's name is not in the list of whitelisted items (defined at top of smartActions file)
+            -- if the item's name is not in the list of whitelisted items then drop it
             if whitelisted[itemDetails["name"]] == nil then  
+                turtle.select(i)
+                turtle.drop()
+            
+            -- if this is the first time we see a slot with this item in it, mark that
+            elseif whitelisted[itemDetails["name"]] == false then
+                whitelisted[itemDetails["name"]] = true
+            
+            -- if this is not the first time we see a slot with this item in it, drop that slot
+            else
                 turtle.select(i)
                 turtle.drop()
             end
