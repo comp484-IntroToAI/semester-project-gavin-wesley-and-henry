@@ -243,18 +243,50 @@ function smartActions.selectItem(itemName)
     return true
 end
 
--- TODO make a gatherItems function that conglomerates multiple stacks
+--[[
+    Conglomerates all items into their maximum stack. The lowest index will end with the largest stack. If there are
+    enough items for multiple slots to be filled, those slots are not guaranteed to be side-by-side, but the bigger stack
+    is guaranteed to be the lower index (closer to top left)
+]]
+function smartActions.gatherItems()
+    local firstSlot = turtle.getSelectedSlot()
+
+    -- remembers the last slot we saw for each item
+    local seenSlots = {}
+    for i = 1,16 do
+        turtle.select(i)
+        local itemDetails = turtle.getItemDetail(i)
+        if itemDetails ~= nil then
+        -- if there's an item at this slot
+
+            if seenSlots[itemDetails["name"]] == nil then
+            -- if we haven't seen the item yet, mark that slot as the last time we saw that item
+                seenSlots[itemDetails["name"]] = i
+            
+            else
+            -- otherwise, try to transfer items to that slot, and check if there are any remaining in current
+            -- if there are, then mark this slot as the last time we saw that item
+                turtle.transferTo(seenSlots[itemDetails["name"]])
+
+                -- check if items are remaining, if so, update seenSlot accordingly
+                itemDetails = turtle.getItemDetail(i)
+                if itemDetails ~= nil then
+                    seenSlots[itemDetails["name"]] = i
+                end
+            end
+        end
+    end
+    turtle.select(firstSlot)
+end
+
 
 --[[
     Drops all items that are not whitelisted items. Keeps at most one full stack/slot of whitelisted items. The list of whitelisted items
     is defined at the top of this function.
-    
-    -- TODO: use gatherItems to make sure the first slot we see is the bigger stack, so we dump the smaller ones
 ]]
 function smartActions.dumpItems()
     -- TODO: figure out how to handle processed versions of this. for instance if we have floppy already, we never need lapis again
     -- TODO: add logs/planks to this system.
-    -- TODO: figure out if we include buckets here. probably, but might affect stack checking logic
     local names = {"minecraft:diamond", "minecraft:redstone", "minecraft:raw_iron", "minecraft:lapis_lazuli", "minecraft:sugar_cane", "minecraft:cobblestone", "minecraft:sand", "minecraft:bucket","minecraft:water_bucket"}
 
     -- we create a set version of this table because we want to be able to check whether some item is in the list
