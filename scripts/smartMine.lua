@@ -53,46 +53,47 @@ function smartMine.mineForBasicOre(ore)
         smac.dumpItems()
         smartMine.mineVein("minecraft:deepslate_diamond_ore")
         smartMine.mineVein("minecraft:diamond_ore")
-    end
 
-    if ore == "redstone" then
+    elseif ore == "redstone" then
         smac.goToY(-59)
         digUntilFind("minecraft:deepslate_redstone_ore", "minecraft:redstone_ore")
         smac.dumpItems()
         smartMine.mineVein("minecraft:deepslate_redstone_ore")
         smartMine.mineVein("minecraft:redstone_ore")
-    end
+    
 
-    if ore == "lapis" or ore == "lapis lazuli" then
+    elseif ore == "lapis" or ore == "lapis lazuli" then
         smac.goToY(-2)
         digUntilFind("minecraft:deepslate_lapis_ore", "minecraft:lapis_ore")
         smac.dumpItems()
         smartMine.mineVein("minecraft:deepslate_lapis_ore")
         smartMine.mineVein("minecraft:lapis_ore")
-    end
 
-    if ore == "iron" then
+
+    elseif ore == "iron" then
         smac.goToY(14)
         digUntilFind("minecraft:deepslate_iron_ore", "minecraft:iron_ore")
         smac.dumpItems()
         smartMine.mineVein("minecraft:deepslate_iron_ore")
         smartMine.mineVein("minecraft:iron_ore")
-    end
+    
 
-    if ore == "coal" or "fuel" then
+    elseif ore == "coal" or ore == "fuel" then
         smac.goToY(45)
         digUntilFind("minecraft:deepslate_coal_ore", "minecraft:coal_ore")
         smac.dumpItems()
         smartMine.mineVein("minecraft:deepslate_coal_ore")
         smartMine.mineVein("minecraft:coal_ore")
-    end
-
+    
     -- this is a temp way to find sand w/o sticking to a surface
     -- based on the idea that we mostly want sand to grow sugarcane on, so it will be at water level
     -- 62 for the y should keep us at the top block of rivers / oceans, so we are walking through water
-    if ore == "sand" then
+    elseif ore == "sand" then
         smac.goToY(62)
         digUntilFind("minecraft:sand", "NONE")
+    
+    else
+        print("invalid ore option")
     end
 
 end
@@ -103,7 +104,7 @@ end
     and then, if there was a block there, goes to that spot and recursively repeats
 ]]
 function smartMine.mineVein(blockName)
-
+    print("called recursive vein mine function")
     -- mine/check above
     local has_block, details = turtle.inspectUp()
     if has_block then

@@ -4,9 +4,6 @@ local smartActions = {}
 local calibration = require "calibration"
 
 
-
-
-
 -- TODO move this to startup function/module
 settings.load()
 
@@ -213,8 +210,10 @@ function smartActions.goToY(desiredY)
     while CurrentY ~= desiredY do
         if CurrentY < desiredY then
             smartActions.goUp()
+            CurrentY = CurrentY + 1
         else
             smartActions.goDown()
+            CurrentY = CurrentY - 1
         end
     end
 end
