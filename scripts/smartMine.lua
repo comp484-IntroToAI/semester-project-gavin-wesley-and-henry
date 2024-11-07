@@ -43,32 +43,48 @@ end
 
 --[[
     Goes to the y-level for an ore, and then mines in a straight line until it finds that resource.
+    Once it finds that resource, it dumps its excess items and mines the whole vein.
 ]]
 function smartMine.mineForBasicOre(ore)
     -- Y-levels to mine at are taken from https://minecraft.wiki/w/Ore#Distribution as of 11/4/24
     if ore == "diamond" or ore == "diamonds" then
         smac.goToY(-59)
         digUntilFind("minecraft:deepslate_diamond_ore", "minecraft:diamond_ore")
+        smac.dumpItems()
+        smartMine.mineVein("minecraft:deepslate_diamond_ore")
+        smartMine.mineVein("minecraft:diamond_ore")
     end
 
     if ore == "redstone" then
         smac.goToY(-59)
         digUntilFind("minecraft:deepslate_redstone_ore", "minecraft:redstone_ore")
+        smac.dumpItems()
+        smartMine.mineVein("minecraft:deepslate_redstone_ore")
+        smartMine.mineVein("minecraft:redstone_ore")
     end
 
     if ore == "lapis" or ore == "lapis lazuli" then
         smac.goToY(-2)
         digUntilFind("minecraft:deepslate_lapis_ore", "minecraft:lapis_ore")
+        smac.dumpItems()
+        smartMine.mineVein("minecraft:deepslate_lapis_ore")
+        smartMine.mineVein("minecraft:lapis_ore")
     end
 
     if ore == "iron" then
         smac.goToY(14)
         digUntilFind("minecraft:deepslate_iron_ore", "minecraft:iron_ore")
+        smac.dumpItems()
+        smartMine.mineVein("minecraft:deepslate_iron_ore")
+        smartMine.mineVein("minecraft:iron_ore")
     end
 
     if ore == "coal" or "fuel" then
         smac.goToY(45)
         digUntilFind("minecraft:deepslate_coal_ore", "minecraft:coal_ore")
+        smac.dumpItems()
+        smartMine.mineVein("minecraft:deepslate_coal_ore")
+        smartMine.mineVein("minecraft:coal_ore")
     end
 
     -- this is a temp way to find sand w/o sticking to a surface
@@ -82,7 +98,91 @@ function smartMine.mineForBasicOre(ore)
 end
 
 
-function smartMine.mineVein()
+--[[
+    Recursively mines a vein of blocks with the given name. Checks every side of the current position for the block,
+    and then, if there was a block there, goes to that spot and recursively repeats
+]]
+function smartMine.mineVein(blockName)
+
+    -- mine/check above
+    local has_block, details = turtle.inspectUp()
+    if has_block then
+        if details["name"] == blockName then
+            smac.goUp()
+            smartMine.mineVein(blockName)
+            smac.goDown()
+        end
+    end
+
+    -- mine/check below
+    has_block, details = turtle.inspectDown()
+    if has_block then
+        if details["name"] == blockName then
+            smac.goDown()
+            smartMine.mineVein(blockName)
+            smac.goUp()
+        end
+    end
+
+    -- mine/check in front
+    has_block, details = turtle.inspect()
+    if has_block then
+        if details["name"] == blockName then
+            smac.goForward()
+            smartMine.mineVein(blockName)
+            smac.goBackward()
+        end
+    end
+
+    -- mine/check to the left
+    turtle.turnLeft()
+    has_block, details = turtle.inspect()
+    if has_block then
+        if details["name"] == blockName then
+            smac.goForward()
+            smartMine.mineVein(blockName)
+            smac.goBackward()
+        end
+    end
+    turtle.turnRight()
+
+    -- mine/check to the right
+    turtle.turnRight()
+    has_block, details = turtle.inspect()
+    if has_block then
+        if details["name"] == blockName then
+            smac.goForward()
+            smartMine.mineVein(blockName)
+            smac.goBackward()
+        end
+    end
+    turtle.turnLeft()
+
+    -- mine/check behind
+    smac.turn180()
+    has_block, details = turtle.inspect()
+    local behind_moved = false
+    if has_block then
+        if details["name"] == blockName then
+            behind_moved = true
+            smac.goForward()
+            smartMine.mineVein(blockName)
+        end
+    end
+    -- reorient regardless, and move back into slot if we had moved forward
+    smac.turn180()
+    if behind_moved == true then 
+        smac.goForward() 
+    end
+
+
+    -- TODO: give this a meaningful return message
+    return {true, "mined"}
+end
+
+
+-- practice function for Wesley
+function smartMine.mineFiveSquare()
     -- go to the back of the cube
     turtle.backward()
     -- mine a 5x5 square, then go back to the center and move forward and do it 4 more times
@@ -97,7 +197,7 @@ function smartMine.mineVein()
        smac.goForward()
        smac.goDown()
        turtle.turnLeft()
-       turtle.turnLeft()
+       turtle.turnLeft() 
        smac.goForward()
        smac.goDown()
        turtle.turnRight()

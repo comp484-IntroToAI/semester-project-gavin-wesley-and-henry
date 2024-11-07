@@ -190,6 +190,19 @@ function smartActions.goDown()
     return moveSuccess
 end
 
+-- goes backwards, maintaining orientation after function call and smartly breaking blocks if necessary
+function smartActions.goBackward()
+    smartActions.turn180()
+    smartActions.goForward()
+    smartActions.turn180()
+end
+
+-- turns the turtle 180 degrees. Not complicated, but makes other code more readable.
+function smartActions.turn180()
+    turtle.turnRight()
+    turtle.turnRight()
+end
+
 
 -- Goes to a y value, breaking blocks if necessary
 function smartActions.goToY(desiredY)
@@ -205,6 +218,8 @@ function smartActions.goToY(desiredY)
         end
     end
 end
+
+
 
     --[[        INVENTORY FUNCTIONS        ]]--
 
