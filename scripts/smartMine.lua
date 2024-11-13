@@ -185,7 +185,7 @@ end
 -- practice function for Wesley
 function smartMine.mineFiveSquare()
     -- go to the back of the cube
-    turtle.backward()
+    turtle.back()
     -- mine a 5x5 square, then go back to the center and move forward and do it 4 more times
     -- the turtle should end up facing forward one block ahead of the cube
     -- the y-value shouldn't need to be updated unless it has to stop in the middle for some reason, probably fuel
