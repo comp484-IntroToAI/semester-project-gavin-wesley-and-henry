@@ -295,8 +295,17 @@ end
 
 
 --[[
-    Drops all items that are not whitelisted items. Keeps at most one full stack/slot of whitelisted items. The list of whitelisted items
-    is defined at the top of this function.
+    Gathers items into stacks, then dumps all non-whitelisted items, as well as the smaller stack of 
+    any whitelisted items that have gone over a stack.
+]]
+function smartActions.smartDump()
+    smartActions.gatherItems()
+    smartActions.dumpItems()
+end
+
+--[[
+    Drops all items that are not whitelisted items. Keeps at most one full stack/slot of whitelisted items. The list 
+    of whitelisted itemsis defined at the top of this function.
 ]]
 function smartActions.dumpItems()
     -- TODO: figure out how to handle processed versions of this. for instance if we have floppy already, we never need lapis again
@@ -330,6 +339,59 @@ function smartActions.dumpItems()
 
     turtle.select(startSlot)
 end
+
+
+--[[
+    Counts how many of a given item the turtle has in its inventory
+]]
+function smartActions.countItem(itemName)
+    local count = 0
+    for i=1,16 do
+        local itemDetails = turtle.getItemDetail(i)
+        if itemDetails ~= nil then
+            if itemDetails["name"] == itemName then
+                count = count + turtle.getItemCount(i)
+            end
+        end
+    end
+    return count
+end
+
+--[[
+    Checks whether we have enough of the given resource to satisfy our resources.
+    If we pass a resource name that isn't in the list, it returns false.
+]]
+function smartActions.isResourceSatisfied(resource_name)
+    local count = smartActions.countItem(resource_name)
+
+    if globals.resourceCount[resource_name] == nil then
+        return false
+    end
+
+    if count >= globals.resourceCount[resource_name] then
+        return true
+    else
+        return false
+    end
+end
+
+--[[
+    Checks whether we have enough of all of our mining resources, as defined in globals.resources. 
+    If we do, returns true.
+]]
+function smartActions.isRecipeSatisfied()
+    local satisfied = true
+
+    -- for each resource, if that resource isn't satisfied, change satisfied to false
+    for resource, count in pairs(globals.resourceCount) do
+        if not smartActions.isResourceSatisfied(resource) then
+            satisfied = false
+        end
+    end
+
+    return satisfied
+end
+
 
         --[[    CALIBRATION FUNCTIONS       ]]--
 

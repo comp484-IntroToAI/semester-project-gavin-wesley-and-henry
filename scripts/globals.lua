@@ -7,7 +7,8 @@ local globals = {}
 This module contains lists of various things that other modules in the library may need.
 
 we need to do the 'for' loops because the pure list versions aren't indexable (we can't check whether something is in them)
-
+    - I wish we could just say arr = {name = true, name2 = true} etc., but the keys in the definition are only implicitly 
+        treated like strings, and they can't have colons in them! which sucks :(
 -- =================== ]]
 
 globals.logs = {}
@@ -45,6 +46,27 @@ for index,name in ipairs(oreNames) do
     globals.ores[name] = false
 end
 
+
+-- ============
+-- DEFINE RESOURCES + RESOURCE COUNTS FOR MAIN RECIPE
+-- ============
+
+-- TODO: figure out how to handle logs
+globals.resources = {}
+local resourceNames = {"minecraft:diamond", "minecraft:redstone", "minecraft:raw_iron", "minecraft:lapis_lazuli", 
+                "minecraft:cobblestone", "minecraft:sand"}
+for index,name in ipairs(resourceNames) do
+    globals.resources[name] = false
+end
+
+
+globals.resourceCount = {}
+    globals.resourceCount["minecraft:diamond"] = 3
+    globals.resourceCount["minecraft:raw_iron"] = 7
+    globals.resourceCount["minecraft:redstone"] = 4
+    globals.resourceCount["minecraft:lapis_lazuli"] = 1
+    globals.resourceCount["minecraft:cobblestone"] = 30
+    globals.resourceCount["minecraft:sand"] = 6
 
 -- RETURN MODULE --
 return globals
