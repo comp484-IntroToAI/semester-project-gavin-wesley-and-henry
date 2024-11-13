@@ -8,6 +8,7 @@
 local smartMine = require("smartMine")
 local smartCraft = require("smartCraft")
 local calibration = require("calibration")
+local smartActions = require("smartActions")
 -- this will be used more extensively eventually, but it's just a placeholder for now
 
 
@@ -15,9 +16,33 @@ local calibration = require("calibration")
 calibration.setY()
 
 -- BELOW ARE TEST RUNS RIGHT NOW
-smartMine.mineForBasicOre("diamonds")
 
+-- TODO find a better logic for this: rn if you mine the diamond vein but don't get enough, you don't get back to
+-- diamonds until after running everything else
 
+-- TODO add recursive-depth check to mineVein or find a different way to mine sand
+while true do
+    if not smartActions.isResourceSatisfied("minecraft:diamond") then
+        smartMine.mineForBasicOre("diamonds")
+
+    elseif not smartActions.isResourceSatisfied("minecraft:redstone") then
+        smartMine.mineForBasicOre("redstone")
+    
+    elseif not smartActions.isResourceSatisfied("minecraft:lapis_lazuli") then
+        smartMine.mineForBasicOre("lapis")
+    
+    elseif not smartActions.isResourceSatisfied("minecraft:raw_iron") then
+        smartMine.mineForBasicOre("iron")
+    
+    elseif not smartActions.isResourceSatisfied("minecraft:sand") then
+        smartMine.mineForBasicOre("sand")
+    
+    else
+        break
+    end
+end
+
+smac.goToY(100)
 
 
 -- Add a calibrater, and run this here:
