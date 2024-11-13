@@ -1,7 +1,7 @@
 
 --[[
     Our installer module! Just run: 
-        wget '"https://raw.githubusercontent.com/comp484-IntroToAI/semester-project-gavin-wesley-and-henry/refs/heads/main/scripts/installer.lua" installer'
+        wget "https://raw.githubusercontent.com/comp484-IntroToAI/semester-project-gavin-wesley-and-henry/refs/heads/main/scripts/installer.lua" installer
     to get this file
 ]]
 function install()
