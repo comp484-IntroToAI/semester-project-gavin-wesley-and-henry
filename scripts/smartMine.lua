@@ -240,6 +240,10 @@ function smartMine.stickToSurface()
     -- TODO: make a function that, when called, has the turtle go down until it is resting on a surface block (check for leaves?)
 end
 
+function smartMine.chopLogs()
+    -- TODO: make a function that, when called, has the turtle explore and chop down trees until it has enough logs
+end
+
 -----
 -- TODO
 

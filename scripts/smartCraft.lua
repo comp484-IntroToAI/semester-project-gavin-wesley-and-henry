@@ -83,15 +83,18 @@ function smartCraft.smeltCurrentItem(toSmelt)
 
 end
 
-
-
-
 ----------------
 -- SUGAR CANE --
 ----------------
 
--- Function assumes we are STANDING on a piece of sand that is water-adjacent!!
+-- Function assumes we are STANDING on a piece of dirt that is water-adjacent!!
 function smartCraft.growSugarCane(scToGrow)
+
+    local foundSuitableLocation = smartCraft.findSugarCaneLocation()
+    if not foundSuitableLocation then
+        return false
+    end
+
     -- Select the sugar cane, or return false if unsuccessful
 
     if smac.selectItem("minecraft:sugar_cane") == false then
@@ -126,11 +129,39 @@ function smartCraft.growSugarCane(scToGrow)
 
     smac.moveDown()
     smac.digDown()
-    turtle.turnLeft()
-    turtle.turnLeft()
-    turtle.turnLeft()
-    turtle.turnLeft()
+    for i=1,4 do
+        turtle.turnLeft()
+    end
     smac.moveDown()
+    return true
+end
+
+-- Function that finds grass/dirt/sand that is next to water.
+function smartCraft.findSugarCaneLocation()
+
+    -- Find water
+    smartCraft.locateWater()
+
+    -- Clear the area
+    smac.goDown()
+    smac.dig()
+    smac.goUp()
+    smac.dig()
+    smac.goForward()
+    smac.goUp()
+    smac.goUp()
+    smac.goUp()
+    smac.goDown()
+    smac.goDown()
+    smac.goDown()
+    
+    -- We might want to check if we really have dirt-- but also dirt is so prevelant im not worried
+    local haveDirt = smac.selectItem("minecraft:dirt")
+    if (not haveDirt) then
+        return false
+    end
+    smac.placeDown()
+
     return true
 end
 
@@ -151,15 +182,6 @@ function smartCraft.locateWater()
         smac.goForward()
     end
 end
-
--- Function that finds grass/dirt/sand that is next to water.
-function smartCraft.findSugarCaneLocation()
-    smartCraft.locateWater()
-
-    -- wander around along the edge until we find a lip w grass/dirt/sand
-
-end
-
 
 -----------------------------
 -- Literal Actual Crafting --
