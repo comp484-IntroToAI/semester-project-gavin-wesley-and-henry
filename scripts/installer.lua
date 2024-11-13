@@ -17,6 +17,9 @@ function install()
     -- CALIBRATION (calibration)
     shell.run("wget","https://raw.githubusercontent.com/comp484-IntroToAI/semester-project-gavin-wesley-and-henry/refs/heads/main/scripts/calibration.lua", "calibration")
 
+    -- GLOBALS (global)
+    shell.run("wget","https://raw.githubusercontent.com/comp484-IntroToAI/semester-project-gavin-wesley-and-henry/refs/heads/main/scripts/globals.lua", "globals")
+
     -- MINING STATE FUNCTIONS (smartMine)
     shell.run("wget","https://raw.githubusercontent.com/comp484-IntroToAI/semester-project-gavin-wesley-and-henry/refs/heads/main/scripts/smartMine.lua", "smartMine")
 

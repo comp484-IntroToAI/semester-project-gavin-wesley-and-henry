@@ -2,7 +2,7 @@ local smartActions = {}
 
 -- TODO - figure out whether requires within modules breaks stuff. does it make programs that require this run it too?
 local calibration = require "calibration"
-
+local globals = require "globals"
 
 -- TODO move this to startup function/module
 settings.load()
@@ -301,37 +301,30 @@ end
 function smartActions.dumpItems()
     -- TODO: figure out how to handle processed versions of this. for instance if we have floppy already, we never need lapis again
     -- TODO: add logs/planks to this system.
-    local names = {"minecraft:diamond", "minecraft:redstone", "minecraft:raw_iron", "minecraft:lapis_lazuli", "minecraft:sugar_cane", "minecraft:cobblestone", "minecraft:sand", "minecraft:bucket","minecraft:water_bucket"}
-
-    -- we create a set version of this table because we want to be able to check whether some item is in the list
-    -- we can't just define them as keys in the initial construction because table keys can't contain colons
-    -- this is what enables the [] indexing syntax
-    local whitelisted = {}
-    for index,name in ipairs(names) do
-        whitelisted[name] = false
-    end
-    -- finished setting up whitelisted
 
     local startSlot = turtle.getSelectedSlot()
+    local seen = {}
 
     for i=1,16 do
         local itemDetails = turtle.getItemDetail(i)
         -- if there's an item in the slot
         if itemDetails ~= nil then
             -- if the item's name is not in the list of whitelisted items then drop it
-            if whitelisted[itemDetails["name"]] == nil then  
+            if globals.whitelisted[itemDetails["name"]] == nil then  
                 turtle.select(i)
                 turtle.drop()
             
-            -- if this is the first time we see a slot with this item in it, mark that
-            elseif whitelisted[itemDetails["name"]] == false then
-                whitelisted[itemDetails["name"]] = true
-            
-            -- if this is not the first time we see a slot with this item in it, drop that slot
             else
-                turtle.select(i)
-                turtle.drop()
-            end
+                -- if this is the first time we see a slot with this item in it, mark that
+                if seen[itemDetails["name"]] == nil then
+                    seen[itemDetails["name"]] = true
+                
+                -- if this is not the first time we see a slot with this item in it, drop that slot
+                else
+                    turtle.select(i)
+                    turtle.drop()
+                end
+            end 
         end
     end
 
