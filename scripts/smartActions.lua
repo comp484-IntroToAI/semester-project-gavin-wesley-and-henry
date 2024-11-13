@@ -342,7 +342,8 @@ end
 
 
 --[[
-    Counts how many of a given item the turtle has in its inventory
+    Counts how many of a given item the turtle has in its inventory. Expects to receive the entire item name,
+    including the "minecraft:" part.
 ]]
 function smartActions.countItem(itemName)
     local count = 0
@@ -359,20 +360,36 @@ end
 
 --[[
     Checks whether we have enough of the given resource to satisfy our resources.
+    For now, to check for logs you just pass it "logs".
     If we pass a resource name that isn't in the list, it returns false.
+    Expects to receive the entire item name, including the "minecraft:" part
 ]]
 function smartActions.isResourceSatisfied(resource_name)
-    local count = smartActions.countItem(resource_name)
-
+    -- if the item isn't in resources, return false
     if globals.resourceCount[resource_name] == nil then
         return false
     end
 
-    if count >= globals.resourceCount[resource_name] then
-        return true
+    -- for now, the only way I know how to check logs is to give them their own logic
+    -- TODO: make this better lol
+    local count = 0
+
+    -- if it's checking for logs, just check every single log and set count to the best one
+    if resource_name == "logs" then
+        for name, name2 in pairs(globals.logs) do
+            local thisCount = smartActions.countItem(name)
+            if thisCount > count then
+                count = thisCount
+            end
+        end
+
+    -- if it's not, set count to just be the count of the item
     else
-        return false
+        count = smartActions.countItem(resource_name)
     end
+
+    -- return whether that count is at least the required amount
+    return count >= globals.resourceCount[resource_name]
 end
 
 --[[
