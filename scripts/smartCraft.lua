@@ -160,7 +160,7 @@ function smartCraft.findSugarCaneLocation()
     if (not haveDirt) then
         return false
     end
-    smac.placeDown()
+    turtle.placeDown()
 
     return true
 end
