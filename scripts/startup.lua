@@ -17,29 +17,24 @@ calibration.setY()
 
 -- BELOW ARE TEST RUNS RIGHT NOW
 
--- TODO find a better logic for this: rn if you mine the diamond vein but don't get enough, you don't get back to
--- diamonds until after running everything else
-
--- TODO add recursive-depth check to mineVein or find a different way to mine sand
 while true do
-    if not smartActions.isResourceSatisfied("minecraft:diamond") then
+    while not smartActions.isResourceSatisfied("minecraft:diamond") do
         smartMine.mineForBasicOre("diamonds")
-
-    elseif not smartActions.isResourceSatisfied("minecraft:redstone") then
-        smartMine.mineForBasicOre("redstone")
-    
-    elseif not smartActions.isResourceSatisfied("minecraft:lapis_lazuli") then
-        smartMine.mineForBasicOre("lapis")
-    
-    elseif not smartActions.isResourceSatisfied("minecraft:raw_iron") then
-        smartMine.mineForBasicOre("iron")
-    
-    elseif not smartActions.isResourceSatisfied("minecraft:sand") then
-        smartMine.mineForBasicOre("sand")
-    
-    else
-        break
     end
+
+    while not smartActions.isResourceSatisfied("minecraft:redstone") do
+        smartMine.mineForBasicOre("redstone")
+    end
+    while not smartActions.isResourceSatisfied("minecraft:lapis_lazuli") do
+        smartMine.mineForBasicOre("lapis")
+    end
+    while not smartActions.isResourceSatisfied("minecraft:raw_iron") do
+        smartMine.mineForBasicOre("iron")
+    end
+    while not smartActions.isResourceSatisfied("minecraft:sand") do
+        smartMine.mineForBasicOre("sand")
+    end
+    break
 end
 
 smac.goToY(100)
