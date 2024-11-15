@@ -50,14 +50,14 @@ function smartMine.mineForBasicOre(ore)
     if ore == "diamond" or ore == "diamonds" then
         smac.goToY(-59)
         digUntilFind("minecraft:deepslate_diamond_ore", "minecraft:diamond_ore")
-        smac.dumpItems()
+        smac.smartDump()
         smartMine.mineVein("minecraft:deepslate_diamond_ore")
         smartMine.mineVein("minecraft:diamond_ore")
 
     elseif ore == "redstone" then
         smac.goToY(-59)
         digUntilFind("minecraft:deepslate_redstone_ore", "minecraft:redstone_ore")
-        smac.dumpItems()
+        smac.smartDump()
         smartMine.mineVein("minecraft:deepslate_redstone_ore")
         smartMine.mineVein("minecraft:redstone_ore")
     
@@ -65,7 +65,7 @@ function smartMine.mineForBasicOre(ore)
     elseif ore == "lapis" or ore == "lapis lazuli" then
         smac.goToY(-2)
         digUntilFind("minecraft:deepslate_lapis_ore", "minecraft:lapis_ore")
-        smac.dumpItems()
+        smac.smartDump()
         smartMine.mineVein("minecraft:deepslate_lapis_ore")
         smartMine.mineVein("minecraft:lapis_ore")
 
@@ -73,7 +73,7 @@ function smartMine.mineForBasicOre(ore)
     elseif ore == "iron" then
         smac.goToY(14)
         digUntilFind("minecraft:deepslate_iron_ore", "minecraft:iron_ore")
-        smac.dumpItems()
+        smac.smartDump()
         smartMine.mineVein("minecraft:deepslate_iron_ore")
         smartMine.mineVein("minecraft:iron_ore")
     
@@ -81,7 +81,7 @@ function smartMine.mineForBasicOre(ore)
     elseif ore == "coal" or ore == "fuel" then
         smac.goToY(45)
         digUntilFind("minecraft:deepslate_coal_ore", "minecraft:coal_ore")
-        smac.dumpItems()
+        smac.smartDump()
         smartMine.mineVein("minecraft:deepslate_coal_ore")
         smartMine.mineVein("minecraft:coal_ore")
     
