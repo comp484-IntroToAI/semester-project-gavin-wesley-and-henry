@@ -4,11 +4,114 @@ local smartCraft = {}
 
 local smac = require "smartActions"
 
------------
--- CHEST --
------------
+-----------------------
+-- CHEST HELPERS
+-- stole these from a forum post by fatboychummy: 
+-- https://github.com/cc-tweaked/CC-Tweaked/discussions/1552#discussioncomment-6664168
+-----------------------
 
-function smartCraft.dumpAllExcept()
+--- Find an item in a chest, given the chest's position and item name.
+---@param item_list itemList The list of items in the chest.
+---@param item_name string The name of the item to find.
+---@return integer? The slot number of the item, or nil if not found.
+local function find_item(item_list, item_name)
+    for slot, item in pairs(item_list) do
+      if item.name == item_name then
+        return slot
+      end
+    end
+    return nil
+end
+  
+--- Find the first empty slot in a chest.
+---@param item_list itemList The list of items in the chest.
+---@param size integer The size of the chest.
+---@return integer? slot The slot number of the first empty slot, or nil if none are empty.
+local function find_empty_slot(item_list, size)
+    for slot = 1, size do
+        if not item_list[slot] then
+        return slot
+        end
+    end
+    return nil
+end
+  
+--- Move an item from one slot to another in a given inventory.
+---@param inventory_name string The name of the inventory to move items in.
+---@param from_slot integer The slot to move from.
+---@param to_slot integer The slot to move to.
+local function move_item_stack(inventory_name, from_slot, to_slot)
+    return peripheral.call(inventory_name, "pushItems", inventory_name, from_slot, nil, to_slot)
+end
+  
+--- Move a specific item to slot one, moving other items out of the way if needed.
+---@param chest_name string The name of the chest to search.
+---@param item_name string The name of the item to find.
+---@return boolean success Whether or not the item was successfully moved to slot one (or already existed there)
+function smartCraft.move_item_to_slot_one(chest_name, item_name)
+    local list = peripheral.call(chest_name, "list")
+    local size = peripheral.call(chest_name, "size")
+    local slot = find_item(list, item_name)
+
+    -- If the item didn't exist, or is already in the first slot, we're done.
+    if not slot then
+        print("Item not found")
+        return false
+    end
+    if slot == 1 then
+        print("Item already in slot 1")
+        return true
+    end
+    
+    -- If an item is blocking the first slot (we already know it's not the one we want), we need to move it.
+    if list[1] then
+        print("Slot 1 is occupied, moving to first empty slot")
+        local empty_slot = find_empty_slot(list, size)
+
+        -- If there are no empty slots, we can't move the item.
+        if not empty_slot then
+        print("No empty slots")
+        return false
+        end
+
+        -- Move the item to the first empty slot.
+        if not move_item_stack(chest_name, 1, empty_slot) then
+        print("Failed to move item to slot " .. empty_slot)
+        return false
+        end
+
+        print("Moved item to slot " .. empty_slot)
+    end
+
+    -- Move the item to slot 1.
+    if move_item_stack(chest_name, slot, 1) == 0 then
+        print("Failed to move item to slot 1")
+        return false
+    end
+
+    print("Moved item to slot 1")
+    return true
+end
+
+-----------------------
+-- CHEST INTERACTION --
+-----------------------
+
+function smartCraft.getItemFromChest(item_name, count) 
+    -- Assumes the turtle is facing a chest
+    -- gets <count> items of the type <item_name> from the chest
+    -- fails if turtle's inventory is full, or if the chest doesn't have the item
+    if item_name == "None" or item_name == "none" or item_name == nil then
+        return true
+    end
+    if smartCraft.move_item_to_slot_one("front", item_name) then
+        return turtle.suck(count)
+    else
+        return false, "the chest doesn't have that item"
+    end
+end
+
+function smartCraft.dumpAllExcept(materials)
     -- Assumes the turtle is facing a chest
     -- Takes a list of items 'materials' and dumps all items besides those from the inventory into that chest
     -- Returns true if successful, false otherwise
@@ -19,6 +122,18 @@ function smartCraft.dumpAllExcept()
     if (details["name"] ~= "minecraft:chest") then
         return false
     end
+
+    local startSlot = turtle.getSelectedSlot()
+    for i=1,16 do
+        local item_details = turtle.getItemDetail(i)
+        if item_details ~= nil then
+            if materials[item_details["name"]] == nil then
+                turtle.select(i)
+                turtle.drop()
+            end
+        end
+    end
+    turtle.select(startSlot)
 
 end
 
@@ -33,7 +148,27 @@ function smartCraft.dumpCurrentSlot()
     if (details["name"] ~= "minecraft:chest") then
         return false
     end
+    turtle.drop()
+    return true
+end
 
+function smartCraft.dumpAllItems()
+    -- Assumes the turtle is facing a chest
+    -- Dumps all of its items into that chest
+    local has_block, details = turtle.inspect()
+    if (not has_block) then
+        return false
+    end
+    if (details["name"] ~= "minecraft:chest") then
+        return false
+    end
+    local startSlot = turtle.getSelectedSlot()
+    for i=1,16 do
+        turtle.select(i)
+        turtle.drop()
+    end
+    turtle.select(startSlot)
+    return true
 end
 
 function smartCraft.collectAll()
@@ -54,6 +189,7 @@ end
 -- FURNACE --
 -------------
 
+-- slot 1: thing to smelt, slot 2: fuel slot, slot 3: result
 function smartCraft.addFuel(nLogs)
     -- Assumes the turtle is facing a furnace
     -- Adds nLogs logs to the furnace in front of it
@@ -187,8 +323,28 @@ end
 -- Literal Actual Crafting --
 -----------------------------
 
-function smartCraft.craftRecipie(slot1, slot2, slot3, slot4, slot5, slot6, slot7, slot8, slot9)
-    -- Still not sure how exactly this will work
+function smartCraft.craftRecipe(recipeList)
+    -- Recipe List MUST BE an array 9 long, with the first three being the top row, etc.
+    -- assumes the turtle is facing a chest which contains all the ingredients necessary to the recipe
+    -- pass "None" or "none" for any slots without items in them
+    smartCraft.dumpAllItems()
+
+    for i=1,3 do
+        turtle.select(i)
+        smartCraft.getItemFromChest(recipeList[i], 1)
+    end
+
+    for i=5,7 do
+        turtle.select(i)
+        smartCraft.getItemFromChest(recipeList[i], 1)
+    end
+
+    for i=9,11 do
+        turtle.select(i)
+        smartCraft.getItemFromChest(recipeList[i], 1)
+    end
+
+    turtle.craft()
 end
 
 -- Tries to craft a new turtle. Returns True if Sucessful, False if otherwise. 

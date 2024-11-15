@@ -76,5 +76,24 @@ globals.resourceCount = {}
     globals.resourceCount["minecraft:sand"] = 6
     globals.resourceCount["logs"] = 6
 
+
+
+-- TODO: add other recipes 
+
+-- TODO FRFR: figure out how to manage different wood types
+    -- maybe pick our wood type by checking our inventory, then appending it to planks/logs?
+
+globals.craftingRecipes = {}
+globals.craftingRecipes["crafting table"] = {"minecraft:oak_planks",    "minecraft:oak_planks",     "none", 
+                                            "minecraft:oak_planks",     "minecraft:oak_planks",     "none", 
+                                            "none",                     "none",                     "none"}
+
+globals.craftingRecipes["sticks"] =         {"minecraft:oak_planks",    "none",                     "none", 
+                                            "minecraft:oak_planks",     "none",                     "none", 
+                                            "none",                     "none",                     "none"}
+
+globals.craftingRecipes["diamond pickaxe"] = {"minecraft:diamond",      "minecraft:diamond",        "minecraft:diamond", 
+                                            "none",                     "minecraft:stick",          "none", 
+                                            "none",                     "minecraft:stick",          "none"}
 -- RETURN MODULE --
 return globals
