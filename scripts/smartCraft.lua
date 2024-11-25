@@ -3,6 +3,7 @@ local smartCraft = {}
 ---------------------
 
 local smac = require "smartActions"
+local smine = require "smartMine"
 
 -----------------------
 -- CHEST HELPERS
@@ -318,6 +319,74 @@ function smartCraft.locateWater()
         smac.goForward()
     end
 end
+
+----------------
+-- GROW LOGS  --
+----------------
+
+
+-- Function goes to y=300, places dirt, and grows the sapling that it has
+-- Fails and returns false, reason if any step along the way fails
+function smartCraft.growSapling()
+
+    -- Go wayyy up in the sky
+    smac.goToY(300)
+
+    -- Select dirt
+    if smac.selectItem("minecraft:dirt") == false then
+        return false, "no dirt in inventory"
+    end
+
+    -- Place the dirt
+    local placed, re = turtle.placeDown()
+    if not placed then
+        return false, re
+    end
+
+    smac.goUp()
+
+    -- Select sapling
+    if smac.selectItem("minecraft:birch_sapling") == false then
+        return false, "no sapling in inventory"
+    end
+
+    -- Place the sapling
+    local place, rea = turtle.placeDown()
+    if not place then
+        return false, rea
+    end
+
+    smac.goBackward()
+    smac.goDown()
+
+    -- Wait for the tree to grow
+    while true do
+        local has_block, details = turtle.inspect()
+        if has_block then
+            if details["name"] == "minecraft:birch_log" then
+                break
+            end
+        end
+    end
+
+    -- Here we'll go up until we hit leaves and then use smartMine.mineVein on the leaves!
+    while true do
+        local has_block, details = turtle.inspectUp()
+        if has_block then
+            if details["name"] == "minecraft:birch_leaves" then
+                break
+            end
+        end
+        smac.goUp()
+    end
+
+    -- Mine the "vein" of leaves
+    smartMine.mineVein("minecraft:birch_leaves")
+
+    -- TODO mine the logs
+
+end
+
 
 -----------------------------
 -- Literal Actual Crafting --
