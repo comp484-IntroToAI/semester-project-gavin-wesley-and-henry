@@ -110,6 +110,42 @@ function smartActions.smartDigDown()
     return dug, reason
 end
 
+-- Helper function for mineLayer, mines just one row and ends where it started
+function smartActions.mineRow(width)
+    for i=1,2 do
+        for i=1,width-1 do
+            smartActions.goForward()
+        end
+        smartActions.turn180()
+    end
+end
+
+-- Helper function for minePrism, mines just one layer :)
+function smartActions.mineLayer(width)
+    for i=1,width-1 do
+        smartActions.mineRow(width)
+        turtle.turnRight()
+        smartActions.goForward()
+        turtle.turnLeft()
+    end
+    smartActions.mineRow(width)
+end
+
+-- Function that takes two dimensions and carves out the amount of space intended
+-- Start in the bottom left corner, end in that same corner facing the same way, just up! :)
+function smartActions.minePrism(width, height)
+    for i=1,height do
+        smartActions.mineLayer(width)
+        turtle.turnLeft()
+        for i=1,width-1 do
+            turtle.goForward()
+        end
+        turtle.turnRight()
+    end
+end
+
+
+
     --[[        MOVEMENT FUNCTIONS      ]]--
 
 
