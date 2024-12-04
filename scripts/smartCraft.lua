@@ -3,7 +3,7 @@ local smartCraft = {}
 ---------------------
 
 local smac = require "smartActions"
-local smine = require "smartMine"
+local smartMine = require "smartMine"
 
 -----------------------
 -- CHEST HELPERS
@@ -383,7 +383,8 @@ function smartCraft.growSapling()
     -- Mine the "vein" of leaves
     smartMine.mineVein("minecraft:birch_leaves")
 
-    -- TODO mine the logs
+    -- Mine the flippin logs :)
+    smartMine.mineVein("minecraft:birch_log")
 
 end
 
