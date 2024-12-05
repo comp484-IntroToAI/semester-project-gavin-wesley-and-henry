@@ -157,7 +157,11 @@ function smartActions.minePrism(width, height, position)
     end
 
     for i=1, height do
-        smartActions.goUp()
+        if position == "top" then
+            smartActions.goUp()
+        else
+            smartActions.goDown()
+        end
     end
 end
 
