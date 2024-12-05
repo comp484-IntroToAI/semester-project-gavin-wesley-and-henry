@@ -345,7 +345,6 @@ end
 ]]
 function smartActions.dumpItems()
     -- TODO: figure out how to handle processed versions of this. for instance if we have floppy already, we never need lapis again
-    -- TODO: add logs/planks to this system.
 
     local startSlot = turtle.getSelectedSlot()
     local seen = {}
@@ -404,22 +403,6 @@ function smartActions.isResourceSatisfied(resource_name)
     -- if the item isn't in resources, return false
     if globals.resourceCount[resource_name] == nil then
         return false
-    end
-
-    -- for now, the only way I know how to check logs is to give them their own logic
-    -- TODO: make this better lol
-    local count = 0
-
-    -- if it's checking for logs, just check every single log and set count to the best one
-    if resource_name == "logs" then
-        for name, name2 in pairs(globals.logs) do
-            local thisCount = smartActions.countItem(name)
-            if thisCount > count then
-                count = thisCount
-            end
-        end
-
-    -- if it's not, set count to just be the count of the item
     else
         count = smartActions.countItem(resource_name)
     end

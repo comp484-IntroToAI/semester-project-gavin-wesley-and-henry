@@ -14,26 +14,6 @@ we need to do the 'for' loops because the pure list versions aren't indexable (w
         treated like strings, and they can't have colons in them! which sucks :(
 -- =================== ]]
 
-globals.logs = {}
-local logNames = {"minecraft:oak_log", "minecraft:spruce_log", "minecraft:birch_log", "minecraft:jungle_log", 
-                "minecraft:acacia_log", "minecraft:dark_oak_log", "minecraft:mangrove_log", "minecraft:cherry_log"}
-for index,name in ipairs(logNames) do
-    globals.logs[name] = name
-end
-
-globals.planks = {}
-local planksNames = {"minecraft:oak_planks", "minecraft:spruce_planks", "minecraft:birch_planks", "minecraft:jungle_planks", 
-                "minecraft:acacia_planks", "minecraft:dark_oak_planks", "minecraft:mangrove_planks", "minecraft:cherry_planks"}
-for index,name in ipairs(planksNames) do
-    globals.planks[name] = name
-end
-
-globals.sugarcaneGrowable = {}
-local sugarcaneGrowableNames = {"minecraft:grass", "minecraft:dirt", "minecraft:sand", "minecraft:mycelium"}
-for index,name in ipairs(sugarcaneGrowableNames) do
-    globals.sugarcaneGrowable[name] = name
-end
-
 globals.whitelisted = {}
 local whitelistedNames = {"minecraft:diamond", "minecraft:redstone", "minecraft:raw_iron", "minecraft:lapis_lazuli", 
                     "minecraft:sugar_cane", "minecraft:cobblestone", "minecraft:sand", "minecraft:bucket", "minecraft:water_bucket",
@@ -49,7 +29,7 @@ for index,name in ipairs(oreNames) do
     globals.ores[name] = name
 end
 
-
+-- lists that may be useful for people in later days: logs, planks, sugarcaneGrowable
 -- ============
 -- DEFINE RESOURCES + RESOURCE COUNTS FOR MAIN RECIPE
 -- ============
@@ -61,7 +41,7 @@ end
 
 globals.resources = {}
 local resourceNames = {"minecraft:diamond", "minecraft:redstone", "minecraft:raw_iron", "minecraft:lapis_lazuli", 
-                "minecraft:cobblestone", "minecraft:sand", "logs"}
+                "minecraft:cobblestone", "minecraft:sand", "minecraft:birch_log", "minecraft:birch_sapling"}
 for index,name in ipairs(resourceNames) do
     globals.resources[name] = name
 end
@@ -74,9 +54,9 @@ globals.resourceCount = {}
     globals.resourceCount["minecraft:lapis_lazuli"] = 1
     globals.resourceCount["minecraft:cobblestone"] = 30
     globals.resourceCount["minecraft:sand"] = 6
-    globals.resourceCount["logs"] = 6
+    globals.resourceCount["minecraft:birch_log"] = 6
 
-
+-- TODO - do math on how many logs necessary
 
 -- TODO: add other recipes 
 
@@ -84,16 +64,63 @@ globals.resourceCount = {}
     -- maybe pick our wood type by checking our inventory, then appending it to planks/logs?
 
 globals.craftingRecipes = {}
-globals.craftingRecipes["crafting table"] = {"minecraft:oak_planks",    "minecraft:oak_planks",     "none", 
-                                            "minecraft:oak_planks",     "minecraft:oak_planks",     "none", 
+globals.craftingRecipes["minecraft:crafting_table"] = {"minecraft:birch_planks",    "minecraft:birch_planks",     "none", 
+                                            "minecraft:birch_planks",     "minecraft:birch_planks",     "none", 
                                             "none",                     "none",                     "none"}
 
-globals.craftingRecipes["sticks"] =         {"minecraft:oak_planks",    "none",                     "none", 
-                                            "minecraft:oak_planks",     "none",                     "none", 
+globals.craftingRecipes["minecraft:stick"] =         {"minecraft:birch_planks",    "none",                     "none", 
+                                            "minecraft:birch_planks",     "none",                     "none", 
                                             "none",                     "none",                     "none"}
 
-globals.craftingRecipes["diamond pickaxe"] = {"minecraft:diamond",      "minecraft:diamond",        "minecraft:diamond", 
+globals.craftingRecipes["minecraft:diamond_pickaxe"] = {"minecraft:diamond",      "minecraft:diamond",        "minecraft:diamond", 
                                             "none",                     "minecraft:stick",          "none", 
                                             "none",                     "minecraft:stick",          "none"}
+
+globals.craftingRecipes["minecraft:paper"] = {"minecraft:sugarcane",      "minecraft:sugarcane",        "minecraft:sugarcane", 
+                                            "none",       "none",          "none", 
+                                            "none",       "none",          "none"}
+
+globals.craftingRecipes["minecraft:blue_dye"] = {"minecraft:lapis_lazuli",      "none",        "none", 
+                                            "none",       "none",          "none", 
+                                            "none",       "none",          "none"}
+
+globals.craftingRecipes["minecraft:chest"] = {"minecraft:birch_planks",      "minecraft:birch_planks",        "minecraft:birch_planks", 
+                                            "minecraft:birch_planks",                     "none",          "minecraft:birch_planks", 
+                                            "minecraft:birch_planks",                     "minecraft:birch_planks",          "minecraft:birch_planks"}
+
+globals.craftingRecipes["minecraft:furnace"] = {"minecraft:cobblestone",      "minecraft:cobblestone",        "minecraft:cobblestone", 
+                                            "minecraft:cobblestone",                     "none",          "minecraft:cobblestone", 
+                                            "minecraft:cobblestone",                     "minecraft:cobblestone",          "minecraft:cobblestone"}
+
+globals.craftingRecipes["minecraft:glass_pane"] = {"minecraft:glass",      "minecraft:glass",        "minecraft:glass", 
+                                            "minecraft:glass",                     "minecraft:glass",          "minecraft:glass", 
+                                            "none",                     "none",          "none"}
+
+globals.craftingRecipes["computercraft:computer"] = {"minecraft:stone",      "minecraft:stone",        "minecraft:stone", 
+                                            "minecraft:stone",                     "minecraft:redstone",          "minecraft:stone", 
+                                            "minecraft:stone",                     "minecraft:glass_pane",          "minecraft:stone"}
+
+
+globals.craftingRecipes["computercraft:disk_drive"] = {"minecraft:stone",      "minecraft:stone",        "minecraft:stone", 
+                                            "minecraft:stone",                     "minecraft:redstone",          "minecraft:stone", 
+                                            "minecraft:stone",                     "minecraft:redstone",          "minecraft:stone"}
+
+globals.craftingRecipes["computercraft:turtle"] = {"minecraft:iron",      "minecraft:iron",        "minecraft:iron", 
+                                            "minecraft:iron",                     "computercraft:computer_normal",          "minecraft:iron", 
+                                            "minecraft:iron",                     "minecraft:chest",          "minecraft:iron"}
+
+globals.craftingRecipes["computercraft:disk"] = {"minecraft:redstone",      "minecraft:paper",        "none", 
+                                            "minecraft:blue_dye",                     "none",          "none", 
+                                            "none",                     "none",          "none"}
+
+-- technically the item created by these is still named 'computercraft:turtle_normal'
+globals.craftingRecipes["computercraft:crafty_turtle"] = {"computercraft:turtle_normal",      "minecraft:crafting_table",        "none", 
+                                            "none",                     "none",          "none", 
+                                            "none",                     "none",          "none"}
+
+globals.craftingRecipes["computercraft:miney_crafty_turtle"] = {"minecraft:diamond_pickaxe",      "computercraft:turtle_normal",        "none", 
+                                            "none",                     "none",          "none", 
+                                            "none",                     "none",          "none"}
+
 -- RETURN MODULE --
 return globals
