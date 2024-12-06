@@ -404,13 +404,13 @@ function smartCraft.craftRecipe(recipeList)
         smartCraft.getItemFromChest(recipeList[i], 1)
     end
 
-    for i=5,7 do
-        turtle.select(i)
+    for i=4,6 do
+        turtle.select(i+1)
         smartCraft.getItemFromChest(recipeList[i], 1)
     end
 
-    for i=9,11 do
-        turtle.select(i)
+    for i=7,9 do
+        turtle.select(i+2)
         smartCraft.getItemFromChest(recipeList[i], 1)
     end
 

@@ -68,6 +68,10 @@ globals.craftingRecipes["minecraft:crafting_table"] = {"minecraft:birch_planks",
                                             "minecraft:birch_planks",     "minecraft:birch_planks",     "none", 
                                             "none",                     "none",                     "none"}
 
+globals.craftingRecipes["minecraft:birch_planks"] = {"minecraft:log",    "none",     "none", 
+                                            "none",     "none",     "none", 
+                                            "none",                     "none",                     "none"}
+
 globals.craftingRecipes["minecraft:stick"] =         {"minecraft:birch_planks",    "none",                     "none", 
                                             "minecraft:birch_planks",     "none",                     "none", 
                                             "none",                     "none",                     "none"}
@@ -76,7 +80,7 @@ globals.craftingRecipes["minecraft:diamond_pickaxe"] = {"minecraft:diamond",    
                                             "none",                     "minecraft:stick",          "none", 
                                             "none",                     "minecraft:stick",          "none"}
 
-globals.craftingRecipes["minecraft:paper"] = {"minecraft:sugarcane",      "minecraft:sugarcane",        "minecraft:sugarcane", 
+globals.craftingRecipes["minecraft:paper"] = {"minecraft:sugar_cane",      "minecraft:sugar_cane",        "minecraft:sugar_cane", 
                                             "none",       "none",          "none", 
                                             "none",       "none",          "none"}
 
@@ -105,9 +109,9 @@ globals.craftingRecipes["computercraft:disk_drive"] = {"minecraft:stone",      "
                                             "minecraft:stone",                     "minecraft:redstone",          "minecraft:stone", 
                                             "minecraft:stone",                     "minecraft:redstone",          "minecraft:stone"}
 
-globals.craftingRecipes["computercraft:turtle"] = {"minecraft:iron",      "minecraft:iron",        "minecraft:iron", 
-                                            "minecraft:iron",                     "computercraft:computer_normal",          "minecraft:iron", 
-                                            "minecraft:iron",                     "minecraft:chest",          "minecraft:iron"}
+globals.craftingRecipes["computercraft:turtle"] = {"minecraft:iron_ingot",      "minecraft:iron_ingot",        "minecraft:iron_ingot", 
+                                            "minecraft:iron_ingot",                     "computercraft:computer_normal",          "minecraft:iron_ingot", 
+                                            "minecraft:iron_ingot",                     "minecraft:chest",          "minecraft:iron_ingot"}
 
 globals.craftingRecipes["computercraft:disk"] = {"minecraft:redstone",      "minecraft:paper",        "none", 
                                             "minecraft:blue_dye",                     "none",          "none", 
