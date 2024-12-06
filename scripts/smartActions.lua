@@ -40,8 +40,6 @@ function smartActions.gy() return smartActions.getY() end
     Return: a success value, a reason for any failure or extra action
 ]]
 function smartActions.smartDig()
-    -- TODO: check whether the block is on disallowed list, returning false and not mining if so
-
     local dug, reason = turtle.dig()
 
     if dug then
@@ -64,8 +62,6 @@ end
 
 -- Version of smart dig to dig up
 function smartActions.smartDigUp()
-    -- TODO: check whether the block is on disallowed list, returning false and not mining if so
-
     local dug, reason = turtle.digUp()
 
     if dug then
@@ -88,8 +84,6 @@ end
 
 -- Version of smart dig to dig down
 function smartActions.smartDigDown()
-    -- TODO: check whether the block is on disallowed list, returning false and not mining if so
-
     local dug, reason = turtle.digDown()
 
     if dug then
@@ -131,16 +125,39 @@ function smartActions.mineLayer(width)
     smartActions.mineRow(width)
 end
 
--- Function that takes two dimensions and carves out the amount of space intended
--- Start in the bottom left corner, end in that same corner facing the same way, just up! :)
-function smartActions.minePrism(width, height)
+
+--[[
+    Mines a square shape of given width and height. Ends by returning to its original position. Also takes in a position. 
+    The valid positions are 'top' for the top left corner of the prism and 'bottom' for the bottom left corner of the prism
+]]
+function smartActions.minePrism(width, height, position)
+    if position ~= "top" and position ~= "bottom" then
+        print("incorrect position passed to minePrism")
+        return false
+    end
+
     for i=1,height do
+
+        -- mine layer
         smartActions.mineLayer(width)
         turtle.turnLeft()
+
+        -- return to start corner
         for i=1,width-1 do
-            turtle.goForward()
+            smartActions.goForward()
         end
         turtle.turnRight()
+
+        -- adjust height according to position
+        if position == "top" then
+            smartActions.goDown()   -- TODO: fix this - technically this mines one block in the corner above/below the prism too :/
+        else
+            smartActions.goUp()
+        end
+    end
+
+    for i=1, height do
+        smartActions.goUp()
     end
 end
 
