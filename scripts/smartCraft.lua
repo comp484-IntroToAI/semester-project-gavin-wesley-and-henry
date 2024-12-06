@@ -427,11 +427,14 @@ function smartCraft.craftTurtle()
         Assuming it is facing a chest with all of the necessary materials (post-smelting), crafts a new miney-crafting turtle
     ]]
 
-    -- craft all the planks we'll need for these (14 for everything, leaving 2 left over)
+    -- craft all the planks we'll need for these (30 for everything, leaving 2 left over)
     smartCraft.craftRecipe(globals.craftingRecipes["minecraft:birch_planks"])
     smartCraft.craftRecipe(globals.craftingRecipes["minecraft:birch_planks"])
     smartCraft.craftRecipe(globals.craftingRecipes["minecraft:birch_planks"])
     smartCraft.craftRecipe(globals.craftingRecipes["minecraft:birch_planks"])
+    smartCraft.craftRecipe(globals.craftingRecipes["minecraft:birch_planks"])
+    smartCraft.craftRecipe(globals.craftingRecipes["minecraft:birch_planks"])
+
 
     -- craft what we'll need to pass on our files
     smartCraft.craftRecipe(globals.craftingRecipes["minecraft:blue_dye"])
@@ -443,6 +446,8 @@ function smartCraft.craftTurtle()
     smartCraft.craftRecipe(globals.craftingRecipes["minecraft:stick"])
     smartCraft.craftRecipe(globals.craftingRecipes["minecraft:diamond_pickaxe"])
     smartCraft.craftRecipe(globals.craftingRecipes["minecraft:crafting_table"])
+    smartCraft.craftRecipe(globals.craftingRecipes["minecraft:chest"])
+
         -- TODO: figure out if add chest / water buckets to this
 
     -- craft all of our mechanical bits, ending with the fully equipped turtle

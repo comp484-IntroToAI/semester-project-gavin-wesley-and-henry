@@ -17,6 +17,9 @@ calibration.setY()
 
 -- BELOW ARE TEST RUNS RIGHT NOW
 
+
+-- TODO: move this logic into a "doMining" function for function decomposition
+-- TODO: also add manager for if we don't have cobblestone
 while true do
     while not smartActions.isResourceSatisfied("minecraft:diamond") do
         smartMine.mineForBasicOre("diamonds")
@@ -34,6 +37,10 @@ while true do
     while not smartActions.isResourceSatisfied("minecraft:sand") do
         smartMine.mineForBasicOre("sand")
     end
+
+
+    -- startCraft()
+        -- get sugarcane, do tree shit, have placeholder for further crafting shit
     break
 end
 

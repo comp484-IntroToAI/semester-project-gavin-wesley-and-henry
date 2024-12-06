@@ -16,8 +16,8 @@ we need to do the 'for' loops because the pure list versions aren't indexable (w
 
 globals.whitelisted = {}
 local whitelistedNames = {"minecraft:diamond", "minecraft:redstone", "minecraft:raw_iron", "minecraft:lapis_lazuli", 
-                    "minecraft:sugar_cane", "minecraft:cobblestone", "minecraft:sand", "minecraft:bucket", "minecraft:water_bucket",
-                    "minecraft:dirt"}
+                    "minecraft:sugar_cane", "minecraft:cobblestone", "minecraft:sand", "minecraft:dirt", 
+                    "minecraft:birch_sapling", "minecraft:birch_log", "minecraft:chest"}
 for index,name in ipairs(whitelistedNames) do
     globals.whitelisted[name] = name
 end
@@ -34,14 +34,9 @@ end
 -- DEFINE RESOURCES + RESOURCE COUNTS FOR MAIN RECIPE
 -- ============
 
--- Currently handling logs by just giving them their own logic every time we interact with the recipe
--- TODO: implement a better strategy for this
-    -- my thought is that resources and resourceCount just have a slot for "at least one of" items, which is a value
-    -- that has its own table, with a table of potential items and the goal count.
-
 globals.resources = {}
 local resourceNames = {"minecraft:diamond", "minecraft:redstone", "minecraft:raw_iron", "minecraft:lapis_lazuli", 
-                "minecraft:cobblestone", "minecraft:sand", "minecraft:birch_log", "minecraft:birch_sapling"}
+                "minecraft:cobblestone", "minecraft:sand"}
 for index,name in ipairs(resourceNames) do
     globals.resources[name] = name
 end
@@ -54,14 +49,7 @@ globals.resourceCount = {}
     globals.resourceCount["minecraft:lapis_lazuli"] = 1
     globals.resourceCount["minecraft:cobblestone"] = 30
     globals.resourceCount["minecraft:sand"] = 6
-    globals.resourceCount["minecraft:birch_log"] = 9
-
--- TODO - do math on how many logs necessary
-
--- TODO: add other recipes 
-
--- TODO FRFR: figure out how to manage different wood types
-    -- maybe pick our wood type by checking our inventory, then appending it to planks/logs?
+    globals.resourceCount["minecraft:birch_log"] = 11
 
 globals.craftingRecipes = {}
 globals.craftingRecipes["minecraft:crafting_table"] = 
@@ -81,8 +69,8 @@ globals.craftingRecipes["minecraft:stick"] =
 
 globals.craftingRecipes["minecraft:diamond_pickaxe"] = 
 {"minecraft:diamond",      "minecraft:diamond",        "minecraft:diamond", 
-                                            "none",                     "minecraft:stick",          "none", 
-                                            "none",                     "minecraft:stick",          "none"}
+"none",                     "minecraft:stick",          "none", 
+"none",                     "minecraft:stick",          "none"}
 
 globals.craftingRecipes["minecraft:paper"] = 
 {"minecraft:sugar_cane",        "minecraft:sugar_cane",         "minecraft:sugar_cane", 
