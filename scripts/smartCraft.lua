@@ -393,10 +393,13 @@ end
 -- Literal Actual Crafting --
 -----------------------------
 
+--[[
+    Craft the recipe in the given list. The list must be an array 9 long, with the first three indices being the top row, etc.
+    Assumes the turtle is facing a chest which contains all the ingredients necessary to the recipe.
+    Pass "None" or "none" for any slots without items in them.
+    The crafted item(s) are placed into the chest, leaving the turtle's inventory empty after the operation.
+]]
 function smartCraft.craftRecipe(recipeList)
-    -- Recipe List MUST BE an array 9 long, with the first three being the top row, etc.
-    -- assumes the turtle is facing a chest which contains all the ingredients necessary to the recipe
-    -- pass "None" or "none" for any slots without items in them
     smartCraft.dumpAllItems()
 
     for i=1,3 do
@@ -415,11 +418,60 @@ function smartCraft.craftRecipe(recipeList)
     end
 
     turtle.craft()
+    smartCraft.dumpAllItems()
 end
 
--- Tries to craft a new turtle. Returns True if Sucessful, False if otherwise. 
-function smartCraft.craftNewTurtle()
 
+function smartCraft.craftTurtle()
+    --[[
+        Assuming it is facing a chest with all of the necessary materials (post-smelting), crafts a new miney-crafting turtle
+    ]]
+
+    -- craft all the planks we'll need for these (14 for everything, leaving 2 left over)
+    smartCraft.craftRecipe(globals.craftingRecipes["minecraft:birch_planks"])
+    smartCraft.craftRecipe(globals.craftingRecipes["minecraft:birch_planks"])
+    smartCraft.craftRecipe(globals.craftingRecipes["minecraft:birch_planks"])
+    smartCraft.craftRecipe(globals.craftingRecipes["minecraft:birch_planks"])
+
+    -- craft what we'll need to pass on our files
+    smartCraft.craftRecipe(globals.craftingRecipes["minecraft:blue_dye"])
+    smartCraft.craftRecipe(globals.craftingRecipes["minecraft:paper"])
+    smartCraft.craftRecipe(globals.craftingRecipes["computercraft:disk"])
+    smartCraft.craftRecipe(globals.craftingRecipes["computercraft:disk_drive"])
+
+    -- craft what we'll need to equip our next turtle
+    smartCraft.craftRecipe(globals.craftingRecipes["minecraft:stick"])
+    smartCraft.craftRecipe(globals.craftingRecipes["minecraft:diamond_pickaxe"])
+    smartCraft.craftRecipe(globals.craftingRecipes["minecraft:crafting_table"])
+        -- TODO: figure out if add chest / water buckets to this
+
+    -- craft all of our mechanical bits, ending with the fully equipped turtle
+    smartCraft.craftRecipe(globals.craftingRecipes["minecraft:glass_pane"])
+    smartCraft.craftRecipe(globals.craftingRecipes["computercraft:computer"])
+    smartCraft.craftRecipe(globals.craftingRecipes["minecraft:chest"])
+    smartCraft.craftRecipe(globals.craftingRecipes["computercraft:turtle"])
+    smartCraft.craftRecipe(globals.craftingRecipes["computercraft:crafty_turtle"])
+    smartCraft.craftRecipe(globals.craftingRecipes["computercraft:miney_crafty_turtle"])
+end
+
+
+function smartCraft.craftPreparation()
+    --[[
+        Craft all of the things we'll need in order to prepare for crafting: furnace, fuel, chest, etc.
+    ]]
+
+    -- TODO: figure out exactly how 
+    -- each plank smelts 1.5 items, so we need:
+    smartCraft.craftRecipe(globals.craftingRecipes["minecraft:birch_planks"])   -- 10 planks * 1.5 for 14 stone (2 planks left-over)
+    smartCraft.craftRecipe(globals.craftingRecipes["minecraft:birch_planks"])
+    smartCraft.craftRecipe(globals.craftingRecipes["minecraft:birch_planks"])
+
+    smartCraft.craftRecipe(globals.craftingRecipes["minecraft:birch_planks"])   -- 4 planks * 1.5 for 6 glass (no planks left-over)
+
+    smartCraft.craftRecipe(globals.craftingRecipes["minecraft:birch_planks"])   -- 5 planks * 1.5 for 7 iron (use the 2 planks left over from stone to supplement)
+
+    -- and we need the furnace
+    smartCraft.craftRecipe(globals.craftingRecipes["minecraft:furnace"])
 end
 
 --- RETURN LIBRARY----

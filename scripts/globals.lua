@@ -54,7 +54,7 @@ globals.resourceCount = {}
     globals.resourceCount["minecraft:lapis_lazuli"] = 1
     globals.resourceCount["minecraft:cobblestone"] = 30
     globals.resourceCount["minecraft:sand"] = 6
-    globals.resourceCount["minecraft:birch_log"] = 6
+    globals.resourceCount["minecraft:birch_log"] = 9
 
 -- TODO - do math on how many logs necessary
 
