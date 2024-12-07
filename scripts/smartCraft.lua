@@ -219,6 +219,33 @@ function smartCraft.smeltCurrentItem(toSmelt)
     end
 
 end
+------------------------------------
+-- Craft-Level Resource Gathering --
+------------------------------------
+
+-- Returns {success?, reason} :)
+function smartCraft.growPlants()
+    
+    sugarCaneSuccess = smartCraft.growSugarCane(4)
+
+    if (not sugarCaneSuccess) then
+        return {false, "sugar cane growth failed"}
+    end
+
+    local logs = smac.countItem("minecraft:birch_log")
+    local saps = smac.countItem("minecraft:birch_sapling")
+    while ((logs < 13) or (saps < 2)) do
+        smac.smartDump()
+        logSuccess, reason = smartCraft.growSapling()
+        if (not logSuccess) then
+            return {logSuccess, reason}
+        end
+        logs = smac.countItem("minecraft:birch_log")
+        saps = smac.countItem("minecraft:birch_sapling")
+    end
+
+    return {true, "plants grown successfully"} 
+end
 
 ----------------
 -- SUGAR CANE --
@@ -369,23 +396,20 @@ function smartCraft.growSapling()
         end
     end
 
-    -- Here we'll go up until we hit leaves and then use smartMine.mineVein on the leaves!
-    while true do
-        local has_block, details = turtle.inspectUp()
-        if has_block then
-            if details["name"] == "minecraft:birch_leaves" then
-                break
-            end
-        end
+    -- Mine the tree! :)
+    smac.goBackward()
+    turtle.turnLeft()
+    smac.goForward()
+    smac.goForward()
+    turtle.turnRight()
+
+    for i=1,6 do
         smac.goUp()
     end
 
-    -- Mine the "vein" of leaves
-    smartMine.mineVein("minecraft:birch_leaves")
+    smac.minePrism(5,8,"top")
 
-    -- Mine the flippin logs :)
-    smartMine.mineVein("minecraft:birch_log")
-
+    return {true, "suceeded in growing a tree!"}
 end
 
 
