@@ -2,8 +2,9 @@
 local smartCraft = {}
 ---------------------
 
-local smac = require "smartActions"
-local smartMine = require "smartMine"
+local smartActions = require("smartActions")
+local smartMine = require("smartMine")
+local globals = require("globals")
 
 -----------------------
 -- CHEST HELPERS
@@ -172,7 +173,7 @@ function smartCraft.dumpAllItems()
     return true
 end
 
-function smartCraft.collectAll()
+function smartCraft.getAllItemsFromChest()
     -- Assumes the turtle is facing a chest
     -- Collects every item from that chest
 
@@ -184,6 +185,9 @@ function smartCraft.collectAll()
         return false
     end
 
+    for i = 1,27 do
+        turtle.suck()
+    end
 end
 
 -------------
@@ -232,16 +236,16 @@ function smartCraft.growPlants()
         return {false, "sugar cane growth failed"}
     end
 
-    local logs = smac.countItem("minecraft:birch_log")
-    local saps = smac.countItem("minecraft:birch_sapling")
+    local logs = smartActions.countItem("minecraft:birch_log")
+    local saps = smartActions.countItem("minecraft:birch_sapling")
     while ((logs < 13) or (saps < 2)) do
-        smac.smartDump()
+        smartActions.smartDump()
         logSuccess, reason = smartCraft.growSapling()
         if (not logSuccess) then
             return {logSuccess, reason}
         end
-        logs = smac.countItem("minecraft:birch_log")
-        saps = smac.countItem("minecraft:birch_sapling")
+        logs = smartActions.countItem("minecraft:birch_log")
+        saps = smartActions.countItem("minecraft:birch_sapling")
     end
 
     return {true, "plants grown successfully"} 
@@ -261,13 +265,13 @@ function smartCraft.growSugarCane(scToGrow)
 
     -- Select the sugar cane, or return false if unsuccessful
 
-    if smac.selectItem("minecraft:sugar_cane") == false then
+    if smartActions.selectItem("minecraft:sugar_cane") == false then
         return false
     end
 
     local initialSugarCaneCount = turtle.getItemCount()
 
-    local moved, r = smac.moveUp()
+    local moved, r = smartActions.moveUp()
     if not moved then
         return false
     end
@@ -277,7 +281,7 @@ function smartCraft.growSugarCane(scToGrow)
         return false
     end
 
-    local moved2, rea = smac.moveUp()
+    local moved2, rea = smartActions.moveUp()
     if not moved then
         return false
     end
@@ -286,17 +290,17 @@ function smartCraft.growSugarCane(scToGrow)
         local block_down, details = turtle.inspectDown()
         if block_down then
             if details["name"] == "minecraft:sugar_cane" then
-                turtle.digDown() -- Not using SMAC here beacuse that gives us more info than we really need.
+                turtle.digDown() -- Not using smartActions here beacuse that gives us more info than we really need.
             end
         end
     end
 
-    smac.moveDown()
-    smac.digDown()
+    smartActions.moveDown()
+    smartActions.digDown()
     for i=1,4 do
         turtle.turnLeft()
     end
-    smac.moveDown()
+    smartActions.moveDown()
     return true
 end
 
@@ -307,20 +311,20 @@ function smartCraft.findSugarCaneLocation()
     smartCraft.locateWater()
 
     -- Clear the area
-    smac.goDown()
-    smac.dig()
-    smac.goUp()
-    smac.dig()
-    smac.goForward()
-    smac.goUp()
-    smac.goUp()
-    smac.goUp()
-    smac.goDown()
-    smac.goDown()
-    smac.goDown()
+    smartActions.goDown()
+    smartActions.dig()
+    smartActions.goUp()
+    smartActions.dig()
+    smartActions.goForward()
+    smartActions.goUp()
+    smartActions.goUp()
+    smartActions.goUp()
+    smartActions.goDown()
+    smartActions.goDown()
+    smartActions.goDown()
     
     -- We might want to check if we really have dirt-- but also dirt is so prevelant im not worried
-    local haveDirt = smac.selectItem("minecraft:dirt")
+    local haveDirt = smartActions.selectItem("minecraft:dirt")
     if (not haveDirt) then
         return false
     end
@@ -333,7 +337,7 @@ end
 -- Does so by wandering around at water level.
 function smartCraft.locateWater()
     -- Go to water level:
-    smac.goToY(63)
+    smartActions.goToY(63)
 
     -- Go until we find water
     while true do
@@ -343,7 +347,7 @@ function smartCraft.locateWater()
                 break
             end
         end
-        smac.goForward()
+        smartActions.goForward()
     end
 end
 
@@ -357,10 +361,10 @@ end
 function smartCraft.growSapling()
 
     -- Go wayyy up in the sky
-    smac.goToY(300)
+    smartActions.goToY(300)
 
     -- Select dirt
-    if smac.selectItem("minecraft:dirt") == false then
+    if smartActions.selectItem("minecraft:dirt") == false then
         return false, "no dirt in inventory"
     end
 
@@ -370,10 +374,10 @@ function smartCraft.growSapling()
         return false, re
     end
 
-    smac.goUp()
+    smartActions.goUp()
 
     -- Select sapling
-    if smac.selectItem("minecraft:birch_sapling") == false then
+    if smartActions.selectItem("minecraft:birch_sapling") == false then
         return false, "no sapling in inventory"
     end
 
@@ -383,8 +387,8 @@ function smartCraft.growSapling()
         return false, rea
     end
 
-    smac.goBackward()
-    smac.goDown()
+    smartActions.goBackward()
+    smartActions.goDown()
 
     -- Wait for the tree to grow
     while true do
@@ -397,17 +401,17 @@ function smartCraft.growSapling()
     end
 
     -- Mine the tree! :)
-    smac.goBackward()
+    smartActions.goBackward()
     turtle.turnLeft()
-    smac.goForward()
-    smac.goForward()
+    smartActions.goForward()
+    smartActions.goForward()
     turtle.turnRight()
 
     for i=1,6 do
-        smac.goUp()
+        smartActions.goUp()
     end
 
-    smac.minePrism(5,8,"top")
+    smartActions.minePrism(5,8,"top") -- this has to go up one more I think
 
     return {true, "suceeded in growing a tree!"}
 end
@@ -506,16 +510,16 @@ end
 -- quick helper functions for working with smelt
 local function goUnderFurnace()
     turtle.back()
-    smac.goDown()
-    smac.goDown()
-    smac.goForward()
+    smartActions.goDown()
+    smartActions.goDown()
+    smartActions.goForward()
 end
 
 local function goAboveFurnace()
     turtle.back()
-    smac.goUp()
-    smac.goUp()
-    smac.goForward()
+    smartActions.goUp()
+    smartActions.goUp()
+    smartActions.goForward()
 end
 
 --[[
@@ -524,7 +528,7 @@ end
 ]]
 function smartCraft.smelt()
     -- put a chest in front of us, and prep for furnace crafting
-    smac.selectItem('minecraft:chest')
+    smartActions.selectItem('minecraft:chest')
     turtle.place()
     smartCraft.dumpAllItems()
 
@@ -538,47 +542,119 @@ function smartCraft.smelt()
     -- place the furnace and go above it
     turtle.turnLeft()
     turtle.place()
-    smac.goUp()
-    smac.goForward()
+    smartActions.goUp()
+    smartActions.goForward()
 
-    smac.selectItem('minecraft:cobblestone')
+    smartActions.selectItem('minecraft:cobblestone')
     turtle.dropDown()
     goUnderFurnace()
 
-    smac.selectItem('minecraft:birch_planks')
+    smartActions.selectItem('minecraft:birch_planks')
     turtle.dropUp()
-    -- TODO refactor this smac.countItem shit into smac.getItemCount to match turtle
-    while(smac.countItem('minecraft:stone') ~= nil and smac.countItem('minecraft:stone') < 14) do
+    -- TODO refactor this smartActions.countItem shit into smartActions.getItemCount to match turtle
+    while(smartActions.countItem('minecraft:stone') ~= nil and smartActions.countItem('minecraft:stone') < 14) do
         turtle.suckUp()
         os.sleep(2)
     end
 
     goAboveFurnace()
-    smac.selectItem('minecraft:sand')
+    smartActions.selectItem('minecraft:sand')
     turtle.dropDown()
     goUnderFurnace()
-    while(smac.countItem('minecraft:glass') < 6) do
+    while(smartActions.countItem('minecraft:glass') < 6) do
         turtle.suckUp()
         os.sleep(2)
     end
 
     goAboveFurnace()
-    smac.selectItem('minecraft:raw_iron')
+    smartActions.selectItem('minecraft:raw_iron')
     turtle.dropDown()
     goUnderFurnace()
-    while(smac.countItem('minecraft:iron_ingot') < 7) do
+    while(smartActions.countItem('minecraft:iron_ingot') < 7) do
         turtle.suckUp()
         os.sleep(2)
     end
 
     turtle.back()
-    smac.goUp()
+    smartActions.goUp()
     turtle.turnRight()
+end
+
+--[[
+    Writes all of our programs to a floppy disk in a disk drive.
+]]
+local function writeToDiskDrive()
+    shell.run("cp calibration disk/calibration")
+    shell.run("cp globals disk/globals")
+    shell.run("cp smartActions disk/smartActions")
+    shell.run("cp smartMine disk/smartMine")
+    shell.run("cp smartCraft disk/smartCraft")
+    shell.run("cp startup disk/startup")
+    shell.run("cp main disk/main")
+    shell.run("cp installer disk/installer")
+end
+
+--[[
+    Assumes we're facing a chest with a miney crafty turtle, disk drive, floppy disk, chest, sugar cane, and sapling.
+
+    Places the new turtle and gives it the functions it needs to operate
+]]
+function smartCraft.placeTurtle()
+    -- Get all of our stuff from the chest
+    turtle.select(1)
+    smartCraft.getItemFromChest('computercraft:turtle_normal', 1)
+    smartCraft.getItemFromChest('computercraft:disk', 1)
+    smartCraft.getItemFromChest('computercraft:disk_drive', 1)
+    smartCraft.getItemFromChest('minecraft:sugar_cane', 1)
+    smartCraft.getItemFromChest('minecraft:birch_sapling', 1)
+    smartCraft.getItemFromChest('minecraft:chest', 1)
+
+    -- Place our disk drive
+    turtle.turnRight()
+    smartActions.selectItem('computercraft:disk_drive')
+    turtle.place()
+
+    -- Put the disk in it and write our programs to that disk
+    smartActions.selectItem('computercraft:disk')
+    turtle.drop()
+    writeToDiskDrive()
+
+    -- place our new turtle next to that disk drive
+    turtle.turnRight()
+    smartActions.goForward()
+    smartActions.goForward()
+    turtle.turnLeft()
+    smartActions.goForward()
+    turtle.turnLeft()
+    smartActions.selectItem('computercraft:turtle_normal')
+    turtle.place()
+
+    -- give it the stuff it needs
+    smartActions.selectItem('minecraft:sugar_cane')
+    turtle.drop()
+    smartActions.selectItem('minecraft:birch_sapling')
+    turtle.drop()
+    smartActions.selectItem("minecraft:chest")
+    turtle.drop()
+
+    -- turn it on
+    peripheral.call('front','turnOn')
+end
+
+function smartCraft.postPartum()
+    turtle.turnLeft()
+    smartActions.goForward()
+    turtle.turnRight()
+    smartActions.goForward()
+    smartActions.goForward()
+    smartCraft.getAllItemsFromChest()
+    smartActions.goForward()
+    smartActions.smartDump()
 end
 
 function smartCraft.completeCraftingProcess()
     -- place our chest and clear our inventory
-    smac.selectItem('minecraft:chest')
+    smartActions.selectItem('minecraft:chest')
     turtle.place()
     smartCraft.dumpAllItems()
 
@@ -590,6 +666,12 @@ function smartCraft.completeCraftingProcess()
 
     -- craft the turtle
     smartCraft.craftTurtle()
+
+    -- birth the new turtle
+    smartCraft.placeTurtle()
+
+    -- re-equip ourselves
+    smartCraft.postPartum()
 end
 
 --- RETURN LIBRARY----

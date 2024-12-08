@@ -1,8 +1,8 @@
 local smartActions = {}
 
 -- TODO - figure out whether requires within modules breaks stuff. does it make programs that require this run it too?
-local calibration = require "calibration"
-local globals = require "globals"
+local calibration = require("calibration")
+local globals = require("globals")
 
 -- TODO move this to startup function/module
 settings.load()

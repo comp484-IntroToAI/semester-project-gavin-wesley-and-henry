@@ -2,7 +2,7 @@
 local smartMine = {}
 ------------------------
 
-local smac = require "smartActions"
+local smac = require("smartActions")
 
 
 --[[
