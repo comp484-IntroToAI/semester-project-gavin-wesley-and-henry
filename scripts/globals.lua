@@ -58,7 +58,7 @@ globals.craftingRecipes["minecraft:crafting_table"] =
 "none",                         "none",                         "none"}
 
 globals.craftingRecipes["minecraft:birch_planks"] = 
-{"minecraft:log",       "none",     "none", 
+{"minecraft:birch_log",       "none",     "none", 
 "none",                 "none",     "none", 
 "none",                 "none",     "none"}
 
