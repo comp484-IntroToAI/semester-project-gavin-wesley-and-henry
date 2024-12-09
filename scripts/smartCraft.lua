@@ -238,7 +238,7 @@ function smartCraft.growPlants()
 
     local logs = smartActions.countItem("minecraft:birch_log")
     local saps = smartActions.countItem("minecraft:birch_sapling")
-    while ((logs < 13) or (saps < 2)) do
+    while ((logs < 13) or (saps < 4)) do
         smartActions.smartDump()
         logSuccess, reason = smartCraft.growSapling()
         if (not logSuccess) then
