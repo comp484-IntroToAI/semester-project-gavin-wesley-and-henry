@@ -32,111 +32,88 @@ end
 
 -- checks whether the given block is next to the turtle
 -- returns a boolean value, as well as a table with the particular positions the block was in
-local function checkBlock(blockName)
-    -- TODO this is probably a smac function. will need to adjust for smart movement
-    local wasBlock = false
-    local blockData = {}
-    for i=1, 4 do
-        blockData[i] = false
-      end
-    local has_block, details
-
-    for i=1, 4 do
-        has_block, details = turtle.inspect()
-        if has_block then
-            if details["name"] == blockName then
-                wasBlock = true
-                blockData[i] = true
-            end
-        end
-        turtle.turnLeft()
+local function checkBedrockInFront()
+    local has_block, details = turtle.inspect()
+    if (has_block and details["name"] == "minecraft:bedrock") then
+        return true
     end
-    
-    return wasBlock, blockData
+    return false
 end
 
+-- Returns the turtle to its original space in the bedrock search, maintaining its original orientation
+local function returnToStart(offset, angle)
+    if angle == "left" then
+        turtle.turnRight()
+    end
+    if angle == "right" then
+        turtle.turnLeft()
+    end
+    for i = 1,offset do
+        turtle.back()
+    end
+end
 
 local function checkStillInBedrock()
-    --[[
-    This checks that we're good by going forward a block, then checking for bedrock again. 
-    There's a possibility this fails too, but it's very slim ]]
+    local offset = 0
+    local angle = "forward"
 
-    local notInBedrock = true
-    -- for each cardinal direction,
     for i=1,4 do
-        turtle.turnLeft()
-
-        -- try to dig forward one block, if we succeed, go forward and check for bedrock and then repeat
-        local success, reason = turtle.dig()
-        -- TODO - this dig used to be smac. think if there's ever a world where we need
-        -- edge case handling here. we're in bedrock, so probs not, but worth checking
-
-        -- if we successfully dig, or there's nothing there, then move and check
-        if success or reason == "Nothing to dig here" then
-            turtle.forward()
-            if checkBlock("minecraft:bedrock") then
-                notInBedrock = false
+        for i=1,2 do 
+            local success, reason = turtle.dig()
+            if success or reason == "Nothing to dig here" then
+                turtle.forward()
+                offset = offset + 1
             end
-
-            -- turn around, go back to original spot, then turn to be in same orientation as before
+            
             turtle.turnLeft()
+            if checkBedrockInFront() then
+                returnToStart(offset, "left")
+                return true
+            end
+            turtle.turnRight()
+            turtle.turnRight()
+            if checkBedrockInFront() then
+                returnToStart(offset, "right")
+                return true
+            end
             turtle.turnLeft()
-            turtle.forward()
-            turtle.turnLeft()
-            turtle.turnLeft()
-        
-        else -- if we fail to dig because it's bedrock then we're uncalibrated
-            notInBedrock = false
+            if checkBedrockInFront() then
+                returnToStart(offset, "forward")
+                return true
+            end
         end
+        turtle.back()
+        turtle.back()
+        turtle.turnRight()
     end
-
-    return notInBedrock
+    return false
 end
+
 
 
 local function goToTopOfBedrock()
     --[[
     When we hit bedrock, there's only a 1 in 5 chance we're at the lowest comfortable y-level
-    This function calibrates us to be at the top of bedrock. It basically checks if there's bedrock
-    on its current level and moves up if there is. There are some circumstances where this will fail, so
-    we then do a reality check to minimize breakages.
+    This function calibrates us to be at the top of bedrock. It first checks whether there is any bedrock next to it, moving up and repeating if there is.
+    If there isn't bedrock directly next to it, it goes out two blocks in each direction, checking for bedrock as it does. If it sees bedrock there, it goes up again and repeats.
     ]]
-    local calibrated = false
-    local yIncrease = 0
-
-    -- while we're still in the middle bedrock layers, check again and move up
-    while not calibrated do
-        -- if we've already moved up 4 layers, our only possibility is to be over bedrock
-        if yIncrease == 4 then
-            break
-        end
-
-        -- check if there's any bedrock on our y-level right next to us, if there is we must not be on the right level
-        -- so we just move up and note our y-level increasing
-        if checkBlock("minecraft:bedrock") then
-            turtle.up()
-            yIncrease = yIncrease + 1
-        else 
-            -- if there's not, then we're probably calibrated!
-            -- this breaks us out of our calibration loop
-            calibrated = true
-        end
-    end
-
-    -- now we do a reality check. we don't need to if our yIncrease is 4, because we'd know we're right above the top layer of bedrock
-    if yIncrease ~= 4 then
-        print("running reality check")
-
-        if not checkStillInBedrock() then
-            -- if our realityCheck failed, we were in a weird edge case. just move up one and recalibrate
-            print("reality failed, so moving up and recalibrating")
+    for i = 1,4 do
+        if checkBedrockInFront() then
+            turtle.digUp()
             turtle.up()
             goToTopOfBedrock()
+            return
         end
+        turtle.turnRight()
     end
-
+    if checkStillInBedrock() then
+        turtle.digUp()
+        turtle.up()
+        goToTopOfBedrock()
+        return
+    end
+    return
 end
-
 
 -- Places the turtle one layer above bedrock, and sets its internal y to -59. Main function to use
 -- if the y-value in settings isn't set yet, or if we run into some other problem that happens because
