@@ -236,17 +236,24 @@ function smartCraft.growPlants()
         return {false, "sugar cane growth failed"}
     end
 
+    local treeLocationFound = smartCraft.createTreeLocation()
+    if not treeLocationFound then
+        return {false, "could not create location to grow tree"}
+    end
+
     local logs = smartActions.countItem("minecraft:birch_log")
     local saps = smartActions.countItem("minecraft:birch_sapling")
     while ((logs < 13) or (saps < 4)) do
         smartActions.smartDump()
-        logSuccess, reason = smartCraft.growSapling()
+        local logSuccess, reason = smartCraft.growSapling()
         if (not logSuccess) then
             return {logSuccess, reason}
         end
         logs = smartActions.countItem("minecraft:birch_log")
         saps = smartActions.countItem("minecraft:birch_sapling")
     end
+
+    smartActions.digDown() -- Break the dirt :)
 
     return {true, "plants grown successfully"} 
 end
@@ -369,11 +376,9 @@ end
 -- GROW LOGS  --
 ----------------
 
-
--- Function goes to y=300, places dirt, and grows the sapling that it has
--- Fails and returns false, reason if any step along the way fails
-function smartCraft.growSapling()
-
+-- Function goes to y=300, places dirt, yay!
+-- returns a success boolean
+function smartCraft.createTreeLocation()
     -- Go wayyy up in the sky
     smartActions.goToY(300)
 
@@ -387,6 +392,14 @@ function smartCraft.growSapling()
     if not placed then
         return false, re
     end
+
+    return true
+end
+
+
+-- Function assumes that we're on a dirt block at y=300, grows the sapling that it has
+-- Fails and returns false, reason if any step along the way fails
+function smartCraft.growSapling()
 
     smartActions.goUp()
 
@@ -415,21 +428,86 @@ function smartCraft.growSapling()
     end
 
     -- Mine the tree! :)
-    smartActions.goBackward()
-    turtle.turnLeft()
-    smartActions.goForward()
-    smartActions.goForward()
-    turtle.turnRight()
+    smartCraft.chopTree()
+    
+    return {true, "suceeded in growing a tree!"}
+end
 
-    for i=1,6 do
+function smartCraft.chopTree()
+    -- Go up to the leaves
+    while true do
+        local has_block, details = turtle.inspectUp()
+        if has_block then
+            if details["name"] == "minecraft:birch_leaves" then
+                break
+            end
+        end
         smartActions.goUp()
     end
+    smartActions.goBackward()
 
-    -- TODO create a better break tree thing!!
+    -- Mine the outer ring of leaves
+    smartActions.goUp()
+    smartActions.digUp()
+    turtle.turnLeft()
 
-    smartActions.minePrism(5,8,"top") -- this has to go up one more I think
+    for i=1,2 do
+        smartActions.goForward()
+        smartActions.digUp()
+    end
+    turtle.turnRight()
+    for i=1,3 do
+        for i=1,4 do
+            smartActions.goForward()
+            smartActions.digUp()
+        end
+        turtle.turnRight()
+    end
+    smartActions.goForward()
+    smartActions.digUp()
+    turtle.turnRight()
 
-    return {true, "suceeded in growing a tree!"}
+    -- Mine the inner ring of leaves
+    for i=1,2 do
+        for i=1,3 do
+            smartActions.goForward()
+            smartActions.digUp()
+        end
+        turtle.turnLeft()
+        for i=1,2 do
+            for i=1,2 do
+                smartActions.goForward()
+                smartActions.digUp()
+            end
+            turtle.turnLeft()
+        end
+        for i=1,2 do
+            smartActions.goForward()
+            smartActions.digUp()
+        end
+        turtle.turnLeft()
+
+        smartActions.goUp()
+        smartActions.goUp()
+        smartActions.goBackward()
+    end
+
+    smartActions.goForward()
+    smartActions.goForward()
+    smartActions.goDown()
+    turtle.turnLeft()
+    smartActions.goForward()
+    
+    -- Mine the logs
+    while true do
+        local hb, deetz = turtle.inspectDown()
+        if hb then
+            if deetz["name"] ~= "minecraft:birch_log" then
+                break
+            end
+        end
+        smartActions.goDown()
+    end
 end
 
 
