@@ -255,7 +255,6 @@ end
 -- SUGAR CANE --
 ----------------
 
--- Function assumes we are STANDING on a piece of dirt that is water-adjacent!!
 function smartCraft.growSugarCane(scToGrow)
 
     local foundSuitableLocation = smartCraft.findSugarCaneLocation()
@@ -309,6 +308,21 @@ function smartCraft.findSugarCaneLocation()
 
     -- Find water
     smartCraft.locateWater()
+
+    -- Now we're above water, but lets go up to make sure we're on top of the water!
+    while true do
+        local has_block, details = turtle.inspectDown()
+        if has_block then
+            if details["name"] ~= "minecraft:water" then
+                break
+            end
+        end
+        if not has_block then
+            break
+        end
+        smartActions.goUp()
+    end
+    smartActions.goDown()
 
     -- Clear the area
     smartActions.goDown()
@@ -410,6 +424,8 @@ function smartCraft.growSapling()
     for i=1,6 do
         smartActions.goUp()
     end
+
+    -- TODO create a better break tree thing!!
 
     smartActions.minePrism(5,8,"top") -- this has to go up one more I think
 
