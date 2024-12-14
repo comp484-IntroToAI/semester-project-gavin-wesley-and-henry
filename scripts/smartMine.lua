@@ -91,6 +91,7 @@ function smartMine.mineForBasicOre(ore)
     elseif ore == "sand" then
         smac.goToY(62)
         digUntilFind("minecraft:sand", "NONE")
+        smac.smartDump()
         smac.minePrism(4,3,'top')
     
     else

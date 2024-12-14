@@ -32,7 +32,7 @@ while true do
     end
 
     smartCraft.growPlants()
-
+    smartActions.smartDump()
     smartCraft.completeCraftingProcess()
 end
 
